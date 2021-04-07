@@ -1,4 +1,11 @@
-//TODO configurrations of the server
-const x = 12;
+const express = require('express');
+const app = express();
 
-console.log(x);
+
+app.get('/', (req, res) => {
+    res.send("Hello World");
+})
+
+app.listen(8080, () => {
+    console.log('Server online');   
+});
