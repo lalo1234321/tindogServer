@@ -1,4 +1,5 @@
-require('./config/deploymentConfig');
+require('./config/deploymentConfig.js');
+require('dotenv').config();
 const express = require('express');
 const app = express();
 
@@ -13,5 +14,5 @@ app.get('/', (req, res) => {
 })
 
 app.listen(process.env.PORT, () => {
-    console.log('Server online');   
+    console.log(`Server on port ${process.env.PORT}`);   
 });

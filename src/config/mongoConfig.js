@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+require('./deploymentConfig.js');
 
 const conectionDB = () => {
     mongoose.connect(process.env.URI_DB, {
