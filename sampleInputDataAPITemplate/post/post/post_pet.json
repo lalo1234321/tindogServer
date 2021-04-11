@@ -1,0 +1,9 @@
+/*Register a new Pet*/
+{
+    "nickName": "pelusa",
+    "age": 5,
+    "breed": "FRENCH",
+    "vaccines": "['COVID', 'SARS-COV', 'VIRUELA']",
+    "profileImagePath": "/assets",
+    "medicalCertificateImagePath": "/assets2"
+}

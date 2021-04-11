@@ -1,0 +1,12 @@
+/*Register a new User*/
+{
+    "userName": "test1",
+    "password": "test1",
+    "email": "test1@test.com",
+    "age": 25,
+    "state": "Méx",
+    "town": "Mete",
+    "ownedPets": [
+        "60732b9e48c7fc4abc1c49c1"
+    ]
+}
