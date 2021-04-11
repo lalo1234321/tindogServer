@@ -1,4 +1,3 @@
-
 import {Schema, model} from 'mongoose'; 
 
 let account = {
@@ -45,7 +44,11 @@ let userScheme = new Schema({
     isOnline: {
         type: Boolean,
         default: false
-    }
+    },
+    ownedPets:[{
+        type: Schema.Types.ObjectId,
+       ref: 'pets' 
+    }] 
 
 });
 

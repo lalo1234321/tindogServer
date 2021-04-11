@@ -35,4 +35,13 @@ router.post('/pet', (req: Request, res: Response) => {
     })
 })
 
+router.get('/user', (req, res) => {
+    let query = User.find().populate('ownedPets')
+    query.exec((err, userDoc) => { 
+        res.json({
+            result: userDoc
+        })
+    })
+})
+
 module.exports = router;
