@@ -1,6 +1,5 @@
-const mongoose = require('mongoose');
 
-const Schema = mongoose.Schema;
+import {Schema, model} from 'mongoose'; 
 
 let account = {
     values:['STANDARD','PREMIUM'],
@@ -50,4 +49,4 @@ let userScheme = new Schema({
 
 });
 
-module.exports = mongoose.model('users',userScheme);
+export default model('users',userScheme);
