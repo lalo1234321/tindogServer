@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose = require('mongoose');
 
 const conectionDB = () => {
     mongoose.connect(process.env.URI_DB, {
@@ -6,7 +6,7 @@ const conectionDB = () => {
         useUnifiedTopology: true,
         useCreateIndex: true
     }, (err) => {
-        (err)?console.log("error in the conection"):console.log("conection successfully with mongodb");
+        (err)?console.log("error in the conection ", err):console.log("conection successfully with mongodb");
     });
 };
 
