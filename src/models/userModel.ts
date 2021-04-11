@@ -1,6 +1,4 @@
-const mongoose = require('mongoose');
-
-const Schema = mongoose.Schema;
+import {Schema, model} from 'mongoose'; 
 
 let account = {
     values:['STANDARD','PREMIUM'],
@@ -46,8 +44,12 @@ let userScheme = new Schema({
     isOnline: {
         type: Boolean,
         default: false
-    }
+    },
+    ownedPets:[{
+        type: Schema.Types.ObjectId,
+       ref: 'pets' 
+    }] 
 
 });
 
-module.exports = mongoose.model('users',userScheme);
+export default model('users',userScheme);
