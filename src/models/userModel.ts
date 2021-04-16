@@ -20,6 +20,14 @@ let userScheme = new Schema({
         required: true,
         unique: true
     },
+    firstName: {
+        type: String,
+        required: true
+    },
+    lastName: {
+        type: String,
+        required: true
+    },
     age: {
         type: Number,
         required: true
@@ -47,9 +55,9 @@ let userScheme = new Schema({
     },
     ownedPets:[{
         type: Schema.Types.ObjectId,
-       ref: 'pets' 
-    }] 
-
-});
+       ref: 'pets'     
+    }]},
+    {timestamps: true}
+);
 
 export default model('users',userScheme);
