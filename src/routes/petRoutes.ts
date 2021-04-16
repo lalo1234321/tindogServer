@@ -10,7 +10,8 @@ router.post('/pet', (req: Request, res: Response) => {
             return res.status(500).json(err);
         res.status(200)
             .json({
-                message: 'Pet registered'
+                message: 'Pet registered',
+                petDoc
             })
     })
 })

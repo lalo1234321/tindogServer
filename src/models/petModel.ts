@@ -1,15 +1,8 @@
 import {Schema, model} from 'mongoose'; 
 
-let species = {
-    values: ['DOG'],
-    message: '${VALUE} no es un tipó de cuenta válido'
-};
-let breeds = {
-    values: ['FRENCH'],
-    message: '${VALUE} this breed value does not exist'
-}
+
 let petScheme = new Schema({
-    nickName:{
+    name:{
         type: String,
         required: true
     },
@@ -17,11 +10,13 @@ let petScheme = new Schema({
         type: Number,
         required: true
     },
+    specie: {
+        type: String,
+        required: true
+    },
     breed: {
         type: String,
-        default: '',
-        enum:breeds
-
+        default: ''
     },
     vaccines: [{type:String}],
     profileImagePath: {
@@ -36,7 +31,12 @@ let petScheme = new Schema({
         type: Boolean,
         default: false
     },
-});
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'users' 
+    }
+},
+    {timestamps: true});
 
 
 export default model('pets', petScheme);
