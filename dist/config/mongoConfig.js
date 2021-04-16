@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose = require("mongoose");
+const conectionDB = () => {
+    mongoose.connect(process.env.URI_DB, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true
+    }, (err) => {
+        (err) ? console.log("error in the conection ", err) : console.log("conection successfully with mongodb");
+    });
+};
+module.exports = {
+    conectionDB
+};
+//# sourceMappingURL=mongoConfig.js.map
