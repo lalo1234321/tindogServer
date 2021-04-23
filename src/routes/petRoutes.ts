@@ -30,13 +30,21 @@ router.post('/pet', formDataFields , (req: Request, res: Response) => {
  
         if(areAllFilesValid(req.files)) { 
             writeFiles(req.files);
-            return res.status(201).json({
-                message: 'File Created'
+            return res.status(200).json({
+                "message": "Pet registered",
+                "petInfo": { 
+                    "name": "fernando",
+                    "age": "12",
+                    "specie": "perro",
+                    "breed": "french poodle",
+                    "vaccines":"covid-19",
+                    "owner":"60791f8afd3aa23fb3716229"
+                } 
             })
         }
 
         return res.status(400).json({
-            message: 'Failure Creating the file'
+            message: 'Invalid extension, you should use JPG, JPEG or PNG'
         }) 
 }) 
 
