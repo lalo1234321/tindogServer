@@ -61,7 +61,7 @@ describe('POST /pet', () => {
             })
     })
 
-    it.only('Respond with 400 if extension of second attached file is wrong', () => { 
+    it('Respond with 400 if extension of second attached file is wrong', () => { 
         request.post('/pet') 
             .accept('application/json')
             .field('name', 'fernando')
