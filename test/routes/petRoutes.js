@@ -1,7 +1,6 @@
 const { describe, it } = require('mocha');
 const requestSuperTest = require('supertest');
-const app = require("../../dist/index");
-const FormData = require('form-data');
+const app = require("../../dist/index"); 
 const { response } = require('express');
 const fs = require('fs');
 const path = require('path');
@@ -62,7 +61,7 @@ describe('POST /pet', () => {
             })
     })
 
-    it('Respond with 400 if extension of second attached file is wrong', () => { 
+    it.only('Respond with 400 if extension of second attached file is wrong', () => { 
         request.post('/pet') 
             .accept('application/json')
             .field('name', 'fernando')

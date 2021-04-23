@@ -56,7 +56,8 @@ let userScheme = new Schema({
     ownedPets:[{
         type: Schema.Types.ObjectId,
        ref: 'pets'     
-    }]},
+    }]
+},
     {timestamps: true}
 );
 
