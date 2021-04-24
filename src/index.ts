@@ -5,7 +5,9 @@ const app = express();
 const morgan = require('morgan');
 const cors = require('cors');
 
-const user = require('./routes/testRoutes.js');
+// const user = require('./routes/testRoutes.js');
+import user from './routes/user';
+
 
 app.use(morgan('dev'));
 app.use(cors());
