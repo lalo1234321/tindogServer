@@ -37,7 +37,96 @@ describe('POST /pet', () => {
             })
             
     });
+    
+    it.only('Respond with a (404 code & Custom message) if all fields are empty', (done) => {
+        request.post('/pet') 
+            .field('name', '')
+            .field('age', '')
+            .field('specie', '')
+            .field('breed', '')
+            .field('vaccines','')
+            .field('owner', '') 
+            .attach('profileImage', null)
+            .attach('medicalCertificateImage', null)
+            .expect(404) 
+            .expect({ 
+                "message": "Invalid value for NAME",
+            }) 
+            .then(response => { 
+                done();
+            })
+            .catch(err => { 
+                done(err);
+            })
+            
+    });
 
+    it.only('Respond with a (404 code & Custom message) if only the first field is filled', (done) => {
+        request.post('/pet') 
+            .field('name', 'Capuchino')
+            .field('age', '')
+            .field('specie', '')
+            .field('breed', '')
+            .field('vaccines','')
+            .field('owner', '') 
+            .attach('profileImage', null)
+            .attach('medicalCertificateImage', null)
+            .expect(404) 
+            .expect({ 
+                "message": "Invalid value for AGE",
+            }) 
+            .then(response => { 
+                done();
+            })
+            .catch(err => { 
+                done(err);
+            })
+            
+    });
+    it.only('Respond with a (404 code & Custom message) if only the first 2 fields are filled', (done) => {
+        request.post('/pet') 
+            .field('name', 'Capuchino')
+            .field('age', 8)
+            .field('specie', '')
+            .field('breed', '')
+            .field('vaccines','')
+            .field('owner', '') 
+            .attach('profileImage', null)
+            .attach('medicalCertificateImage', null)
+            .expect(404) 
+            .expect({ 
+                "message": "Invalid value for SPECIE",
+            }) 
+            .then(response => { 
+                done();
+            })
+            .catch(err => { 
+                done(err);
+            })
+            
+    });
+    it.only('Respond with a (404 code & Custom message) if only the even fields are filled', (done) => {
+        request.post('/pet') 
+            .field('name', 'Capuchino')
+            .field('age', '')
+            .field('specie', 'perro')
+            .field('breed', '')
+            .field('vaccines','covid-19')
+            .field('owner', '') 
+            .attach('profileImage', null)
+            .attach('medicalCertificateImage', null)
+            .expect(404) 
+            .expect({ 
+                "message": "Invalid value for AGE",
+            }) 
+            .then(response => { 
+                done();
+            })
+            .catch(err => { 
+                done(err);
+            })
+            
+    });
     it('Respond with 400 if extension of first attached file is wrong', () => { 
         request.post('/pet') 
             .accept('application/json')
