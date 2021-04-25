@@ -18,7 +18,7 @@ router.post('/login', async(req, res) => {
         const user:IUser = await User.findOne({email: req.body.email});
         if( !user ) {
             return res.status(400).json({
-                msg:"Usuarui no encontrado"
+                msg:"Usuario no encontrado"
             });
         }
         const validPassword = await bcrypt.compare(passwordBody, user.password);
