@@ -9,11 +9,35 @@ const router = Router();
 
 
 router.post('/login', async(req, res) => {
-    let password1 = req.body.password;
+    let passwordBody = req.body.password;
     
-    const user:IUser = await User.findOne({email: req.body.email});
+    
     // let password2 = query.get('password');
-    console.log(user.password);
+    
+    try {
+        const user:IUser = await User.findOne({email: req.body.email});
+        if( !user ) {
+            return res.status(400).json({
+                msg:"Usuarui no encontrado"
+            });
+        }
+        const validPassword = await bcrypt.compare(passwordBody, user.password);
+        if( !validPassword ) {
+            return res.status(400).json({
+                msg:'Las credenciales no coinciden'
+            });
+        }
+        res.status(200).json({
+            user
+        });
+
+    } catch( err ) {
+        return res.status(500).json({
+            msg:'Ocurrió un error, hablé con el administrador!'
+        });
+    }
+
+
     //bcrypt.compare(req.body.password, user.password);
     //bcrypt.compare();
     // password = await bcrypt.compare(password, user.password);
