@@ -2,8 +2,8 @@ import { Router, Request, Response } from 'express';
 import User from '../models/userModel'; 
 import * as bcrypt from 'bcrypt';
 import { IUser } from "../interfaces/IUser";
-
-
+// import { generarJWT } from '../utils/jwt';
+const { generarJWT } = require('../utils/jwt');
 
 const router = Router();
 
@@ -27,8 +27,10 @@ router.post('/login', async(req, res) => {
                 msg:'Las credenciales no coinciden'
             });
         }
+        const token = await generarJWT( user._id );
         res.status(200).json({
-            user
+            user,
+            token
         });
 
     } catch( err ) {

@@ -6,9 +6,11 @@ const generarJWT = ( uid ) => {
         const payload = {
             uid
         };
+        console.log('entró a la generación');
         jwt.sign( payload, process.env.JWT_KEY, {
             expiresIn: '48h'
         }, (err, token) => {
+            console.log(token);
             if(err) {
                 // no se pudo crear el token
                 reject('No se pudo generar el JWT');
