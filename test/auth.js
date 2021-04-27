@@ -1,48 +1,43 @@
-const request = require('supertest');
-const express = require('express');
 const {expect} = require('chai');
+const sinon = require('sinon');
+const { stub } = require('sinon');
+const requestSuperTest = require('supertest');
 const app = require('../dist/index');
 const {describe, it} = require('mocha');
+const {userController} = require('../dist/routes/user');
+const { request, response } = require('express');
 
-describe('Register test', () => {
+describe('Register test', (  ) => {
+    
+
     it('should return a status 200', (done) => { 
-        request(app)    
+        const stubbing = sinon.stub(userController, 'register').callsArgWith(2,request, response);
+        console.log(stubbing);
+        requestSuperTest(app)    
             .post('/register')
             .send({
                 "firstName": "Edgar",
                 "lastName": "Mirafuentes",
-                "userName": "test2",
-                "email": "test2@test.com",
-                "password": "password2",
+                "userName": "lalo1234321",
+                "email": "lalo24@test.com",
+                "password": "password1234",
                 "age": 27,
                 "state": "Méx",
-                "town": "Metepec"
-                
+                "town": "Metepec"               
             })
             .expect(200)
-            .end((err, res) => {
-                    (err) ? done(err) : done();
+            .then( response => {
+
+            expect(stubbing.calledOnce).to.be.true;
+            done();
+            })
+            .catch( onRejected => {
+                console.log('Error', onRejected);
+                done(onRejected);
             });
+
     });
 
-    // it('should return a status 400 if one field is empty', (done) => { 
-    //     request(app)    
-    //         .post('/register')
-    //         .send({
-    //             "firstName": "Edgar",
-    //             "lastName": "Mirafuentes",
-    //             "userName": "test2",
-    //             "email": "test2@test.com",
-    //             "password": "password2",
-    //             "age": 27,
-    //             "state": "Méx",
-    //             "town": ""
-                
-    //         })
-    //         .expect(400)
-    //         .end((err, res) => {
-    //                 (err) ? done(err) : done();
-    //         });
-    // });
+    
 });
 

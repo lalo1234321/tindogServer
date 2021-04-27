@@ -3,6 +3,7 @@ import * as bcrypt from 'bcrypt';
 import User from '../models/userModel';
 
 const register = async(req: Request, res: Response) => {
+    console.log('dentro del método');
     let body = req.body;
     let password = body.password;
     password = bcrypt.hashSync(password,5);
@@ -21,6 +22,6 @@ const register = async(req: Request, res: Response) => {
 };
 
 
-module.exports = {
+export {
     register
 }

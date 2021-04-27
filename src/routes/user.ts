@@ -1,13 +1,14 @@
 import { Router } from 'express';
 import { check } from 'express-validator';
-const { register } = require('../controllers/user');
-const validator = require('express-validator');
+import {register}  from '../controllers/user';
 const router = Router();
 const { validarCampos, validarEdad } = require('../middleware/validateFields');
 
+const userController = { 
+    register: register
+};
 
-
-router.post('/register',[
+export default router.post('/register',[
     check('firstName', 'El nombre es obligatorio').notEmpty(),
     validarCampos,
     check('lastName', 'El apellido es obligatorio').notEmpty(),
@@ -27,7 +28,9 @@ router.post('/register',[
     check('email', 'Email no válido').isEmail(),
     validarCampos,
     validarEdad
-], register);
+], userController.register);
 
 
-export default router;
+export {
+    userController
+};

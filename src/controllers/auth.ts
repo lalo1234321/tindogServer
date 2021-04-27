@@ -6,7 +6,7 @@ const { generarJWT } = require('../utils/jwt');
 
 const login = async(req: Request, res: Response) => {
     let passwordBody = req.body.password;
-    
+    console.log("se está ejecutando");
     // para obtener el valor de un query si es que no implementamos una interfaz en nuestros modelos
     //  de mongodb
     // let password2 = query.get('password');
