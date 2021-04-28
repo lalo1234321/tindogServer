@@ -10,7 +10,7 @@ describe('Main test', () => {
         request(app)
             .get('/')
             .end(function(err, res) {
-                    console.log('res: ', res);
+                    // console.log('res: ', res);
                     expect(res.text).equal("Hello World");
 
             })
