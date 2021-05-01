@@ -4,15 +4,16 @@ require('dotenv').config();
 const app = express();
 const morgan = require('morgan');
 const cors = require('cors'); 
-const userRoutes = require('./routes/userRoutes');
-const petRoutes = require('./routes/petRoutes');
+import userRoutes from "./routes/userRoutes";
+import petRoutes from "./routes/petRoutes";
+
 
 app.use(morgan('dev'));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(userRoutes); 
-app.use(petRoutes);
+app.use(petRoutes.router);
 
 const { conectionDB } = require('./config/mongoConfig.js'); 
 conectionDB();

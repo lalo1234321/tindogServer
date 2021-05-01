@@ -1,9 +1,11 @@
 const { describe, it } = require('mocha');
 const requestSuperTest = require('supertest');
 const app = require("../../dist/index"); 
+const petRoutes = require('../../dist/routes/petRoutes');
 const { response } = require('express');
 const fs = require('fs');
 const path = require('path');
+const chai = require('chai');
 
 describe('POST /pet', () => {
     const request = requestSuperTest(app);
@@ -15,8 +17,8 @@ describe('POST /pet', () => {
             .field('breed', 'french poodle')
             .field('vaccines','covid-19')
             .field('owner', '60791f8afd3aa23fb3716229') 
-            .attach('profileImage', path.join(__dirname, '../../assets/profileImage.jpeg'))
-            .attach('medicalCertificateImage', path.join(__dirname, '../../assets/certificado.jpg'))
+            .attach('profileImage', path.join(__dirname, '../../testAssets/profileImage.jpeg'))
+            .attach('medicalCertificateImage', path.join(__dirname, '../../testAssets/certificado.jpg'))
             .expect(200) 
             .expect({ 
                 "message": "Pet registered",
@@ -38,7 +40,7 @@ describe('POST /pet', () => {
             
     });
     
-    it.only('Respond with a (404 code & Custom message) if all fields are empty', (done) => {
+    it('Respond with a (404 code & Custom message) if all fields are empty', (done) => {
         request.post('/pet') 
             .field('name', '')
             .field('age', '')
@@ -61,7 +63,7 @@ describe('POST /pet', () => {
             
     });
 
-    it.only('Respond with a (404 code & Custom message) if only the first field is filled', (done) => {
+    it('Respond with a (404 code & Custom message) if only the first field is filled', (done) => {
         request.post('/pet') 
             .field('name', 'Capuchino')
             .field('age', '')
@@ -83,7 +85,7 @@ describe('POST /pet', () => {
             })
             
     });
-    it.only('Respond with a (404 code & Custom message) if only the first 2 fields are filled', (done) => {
+    it('Respond with a (404 code & Custom message) if only the first 2 fields are filled', (done) => {
         request.post('/pet') 
             .field('name', 'Capuchino')
             .field('age', 8)
@@ -105,7 +107,7 @@ describe('POST /pet', () => {
             })
             
     });
-    it.only('Respond with a (404 code & Custom message) if only the even fields are filled', (done) => {
+    it('Respond with a (404 code & Custom message) if only the even fields are filled', (done) => {
         request.post('/pet') 
             .field('name', 'Capuchino')
             .field('age', '')
@@ -136,8 +138,8 @@ describe('POST /pet', () => {
             .field('breed', 'french poodle')
             .field('vaccines','covid-19')
             .field('owner', '60791f8afd3aa23fb3716229') 
-            .attach('profileImage', path.join(__dirname, '../../assets/ManualDeUsuario.pdf'))
-            .attach('medicalCertificateImage', path.join(__dirname, '../../assets/certificado.jpg'))
+            .attach('profileImage', path.join(__dirname, '../../testAssets/ManualDeUsuario.pdf'))
+            .attach('medicalCertificateImage', path.join(__dirname, '../../testAssets/certificado.jpg'))
             .expect(400) 
             .expect({
                 message: "Invalid extension, you should use JPG, JPEG or PNG"
@@ -159,8 +161,8 @@ describe('POST /pet', () => {
             .field('breed', 'french poodle')
             .field('vaccines','covid-19')
             .field('owner', '60791f8afd3aa23fb3716229') 
-            .attach('profileImage', path.join(__dirname, '../../assets/profileImage.jpeg'))
-            .attach('medicalCertificateImage', path.join(__dirname, '../../assets/plain_text.txt'))
+            .attach('profileImage', path.join(__dirname, '../../testAssets/profileImage.jpeg'))
+            .attach('medicalCertificateImage', path.join(__dirname, '../../testAssets/plain_text.txt'))
             .expect(400) 
             .expect({
                 message: "Invalid extension, you should use JPG, JPEG or PNG"
@@ -172,4 +174,18 @@ describe('POST /pet', () => {
                 done(err);
             })
     })
+    
+    it('Returns true if the File is valid', (done) => {
+        const testFile = [
+                {
+                    originalname: "medicalCertificateImage.jpg",
+                    mimetype: "image/jpg"
+                }
+        ]
+
+        petRoutes.isValidFile(testFile);
+        done();
+        
+    });
+
 })
