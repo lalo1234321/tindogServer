@@ -1,4 +1,5 @@
-import {Schema, model} from 'mongoose'; 
+import { Model, Schema, model }  from 'mongoose'; 
+import { IUser } from "../interfaces/IUser";
 
 let account = {
     values:['STANDARD','PREMIUM'],
@@ -61,4 +62,5 @@ let userScheme = new Schema({
     {timestamps: true}
 );
 
-export default model('users',userScheme);
+const User: Model<IUser> = model('users',userScheme);
+export default  User;

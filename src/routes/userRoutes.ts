@@ -1,6 +1,8 @@
 import { Router, Request, Response } from 'express';
 const router = Router();
 import User from '../models/userModel';
+import Pet from '../models/petModel';
+const { validarJWT } = require('../middleware/validateJwt');
 
 router.post('/user', async(req, res) => {
     let body = req.body;
@@ -28,5 +30,11 @@ router.get('/user', (req, res) => {
         })
     })
 })
+
+router.get('/match',[validarJWT] ,(req,res)  => {
+    res.status(200).json({
+        msg:"esta ruta está protegida"
+    })
+});
 
 module.exports = router;
