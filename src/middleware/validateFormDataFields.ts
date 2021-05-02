@@ -19,7 +19,7 @@ const displayErrors = (req: Request, res: Response, next) => {
 };
 
 const validateMediaFields = (req: Request, res: Response, next) => {
-    if(Object.entries(req.files).length === 0) 
+    if(Object.entries(req.files).length !== 2) 
         return res.status(404).json({
             message: 'Upload the Profile Image & Medical Certificate Image'
         })
