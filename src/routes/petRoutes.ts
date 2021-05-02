@@ -41,7 +41,6 @@ const uploadFormData = upload.fields([
     {name: "profileImage"},
 ])
 router.post('/pet', uploadFormData , validateFields, validateMediaFields, (req: Request, res: Response) => { 
-    //console.log('req.body: ', req.body);
     if(areAllFilesValid(req.files)) { 
         writeFiles(req.files);
         return res.status(200).json({
@@ -61,6 +60,16 @@ router.post('/pet', uploadFormData , validateFields, validateMediaFields, (req: 
         message: 'Invalid extension, you should use JPG, JPEG or PNG'
     }) 
 }) 
+
+router.get('/pet', (req: Request, res: Response) => {
+    const hostname= 'localhost:8080';
+    const path = 'profileImage';
+    const fileName = 'profileImage.jpeg';
+    res.status(200).json({
+        message: "Profile Image",
+        img: `${hostname}/${path}/${fileName}`
+    })
+});
 
 function areAllFilesValid(files) { 
     let file: Express.Multer.File;

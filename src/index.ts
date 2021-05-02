@@ -15,6 +15,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(userRoutes); 
 app.use(petRoutes.router);
 app.use(login);
+app.use(express.static('public'));
 
 const { conectionDB } = require('./config/mongoConfig.js'); 
 conectionDB();
