@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { check } from 'express-validator';
 import { login } from '../controllers/auth';
-const { validarCampos, validarEdad } = require('../middleware/validateFields');
+const { validarCampos } = require('../middleware/validateFields');
 
 
 

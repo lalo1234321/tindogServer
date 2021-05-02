@@ -6,7 +6,6 @@ const morgan = require('morgan');
 const cors = require('cors'); 
 import userRoutes from "./routes/userRoutes";
 import petRoutes from "./routes/petRoutes";
-import user from './routes/user';
 import login from './routes/auth';
 
 app.use(morgan('dev'));
@@ -15,6 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(userRoutes); 
 app.use(petRoutes.router);
+app.use(login);
 
 const { conectionDB } = require('./config/mongoConfig.js'); 
 conectionDB();
