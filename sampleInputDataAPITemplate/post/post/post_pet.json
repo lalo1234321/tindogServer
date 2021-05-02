@@ -4,6 +4,6 @@
     "age": 5,
     "breed": "FRENCH",
     "vaccines": "['COVID', 'SARS-COV', 'VIRUELA']",
-    "profileImagePath": "/assets",
-    "medicalCertificateImagePath": "/assets2"
+    "profileImagePath": "/testAssets",
+    "medicalCertificateImagePath": "/testAssets2"
 }
