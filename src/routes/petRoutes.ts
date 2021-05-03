@@ -41,8 +41,21 @@ const uploadFormData = upload.fields([
     {name: "profileImage"},
 ])
 router.post('/pet', uploadFormData , validateFields, validateMediaFields, (req: Request, res: Response) => { 
+//    console.log('file: ', req.files);
     if(areAllFilesValid(req.files)) { 
         writeFiles(req.files);
+        const hostname = 'localhost:8080';
+        const petDoc = new Pet({
+            name: req.body.name,
+            age: req.body.age,
+            specie: req.body.specie,
+            breed: req.body.breed,
+            vaccines: req.body.vaccines,
+            profileImagePath: path.join(hostname, 'profileImagePath', getFileByIndex(0, req.files).originalname),
+            medicalCertificateImagePath: path.join(hostname, 'medicalCertificateImage',getFileByIndex(1, req.files).originalname),
+            owner: req.body.owner
+        })
+        petDoc.save();
         return res.status(200).json({
             "message": "Pet registered",
             "petInfo": { 
@@ -91,7 +104,7 @@ export function isValidFile(file: Express.Multer.File): boolean {
 }
 function writeFiles(files) { 
     let file: Express.Multer.File;
-    
+    //TODO rename 'keyFormData' -> 'formDataKey'
     for(let keyFormData in files) { // 'in' returns a string (the key), 'of' returns the value (only works with iterable objects)
         file = files[keyFormData];
         const writableStream = fs.createWriteStream(path.join(__dirname, '../../serverStorage', `${file[0].originalname}`));
@@ -99,4 +112,18 @@ function writeFiles(files) {
     }
 }
 
+function getFileByIndex(index:number, files): Express.Multer.File {
+    let fileWrappedByArray: Express.Multer.File[];
+    let i = 0;
+    if(Object.entries(files).length > 2)
+        throw Error('Files set length exceeded');
+    if(Object.entries(files).length < 0)
+        throw Error('Index number negative');
+    for(let formDataKey in files) { // 'in' returns a string (the key), 'of' returns the value (only works with iterable objects)
+        fileWrappedByArray = files[formDataKey];
+        if(i == index)
+            return fileWrappedByArray[0];
+        i++;
+    }
+}
 export default { router}
