@@ -3,25 +3,21 @@ require('./config/deploymentConfig.js');
 require('dotenv').config();
 const app = express();
 const morgan = require('morgan');
-const cors = require('cors');
-
-const testRoutes = require('./routes/testRoutes.js');
-import user from './routes/user';
+const cors = require('cors'); 
+import userRoutes from "./routes/userRoutes";
+import petRoutes from "./routes/petRoutes";
 import login from './routes/auth';
 
 app.use(morgan('dev'));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(user);
+app.use(userRoutes); 
+app.use(petRoutes.router);
 app.use(login);
-app.use(testRoutes);
 
 const { conectionDB } = require('./config/mongoConfig.js'); 
 conectionDB();
-app.get('/', (req, res) => {
-    res.send("Hello World");
-})
 
 module.exports = app.listen(process.env.PORT, () => {
     console.log(`Server on port ${process.env.PORT}`);   
