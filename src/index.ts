@@ -7,6 +7,7 @@ const cors = require('cors');
 import userRoutes from "./routes/userRoutes";
 import petRoutes from "./routes/petRoutes";
 import login from './routes/auth';
+import deleteUser from './routes/DeleteUser';
 
 app.use(morgan('dev'));
 app.use(cors());
@@ -15,6 +16,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(userRoutes); 
 app.use(petRoutes.router);
 app.use(login);
+
+app.use(deleteUser);
 
 const { conectionDB } = require('./config/mongoConfig.js'); 
 conectionDB();
