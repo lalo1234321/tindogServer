@@ -6,6 +6,11 @@ let petScheme = new Schema({
         type: String,
         required: true
     },
+    username: {
+        type: String,
+        require: true,
+        unique:true
+    },
     age: {
         type: Number,
         required: true

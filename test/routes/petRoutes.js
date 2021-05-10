@@ -2,8 +2,6 @@ const { describe, it } = require('mocha');
 const requestSuperTest = require('supertest');
 const app = require("../../dist/index"); 
 const petRoutes = require('../../dist/routes/petRoutes');
-const { response } = require('express');
-const fs = require('fs');
 const path = require('path');
 const chai = require('chai');
 
