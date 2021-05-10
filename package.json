@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --recursive --timeout 2000 --exit --reporter nyan",
+    "test": "mocha --recursive --timeout 2000 --exit --reporter spec",
+    "test-nyan": "mocha --recursive --timeout 2000 --exit --reporter nyan",
     "test-coverage": "nyc --reporter=html --reporter=text mocha --recursive --timeout 2000 --exit",
     "start": "node dist/index.js"
   },

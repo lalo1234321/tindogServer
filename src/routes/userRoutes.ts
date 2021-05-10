@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
 import { registerUser, getAllUsersWithTheirPets } from "../controllers/userController";
 
 const router = Router();

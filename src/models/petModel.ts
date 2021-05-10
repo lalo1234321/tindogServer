@@ -2,14 +2,14 @@ import {Schema, model} from 'mongoose';
 
 
 let petScheme = new Schema({
-    name:{
-        type: String,
-        required: true
-    },
     username: {
         type: String,
         require: true,
         unique:true
+    },
+    name:{
+        type: String,
+        required: true
     },
     age: {
         type: Number,
