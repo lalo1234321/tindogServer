@@ -1,8 +1,9 @@
-import IFile from '../interfaces/IFile';
+import IFile, { KindOfImage } from '../interfaces/IFile';
 import * as fs from 'fs';
 import * as path from "path";
 
-class MulterFileOps {
+export class MulterFileOps {
+    constructor() { }
     private _isValidFile(file: IFile): boolean {
         const originalName = file[0].originalname;
         const mimeType = file[0].mimetype;
@@ -11,7 +12,7 @@ class MulterFileOps {
             
         return ALLOWED_EXTENSIONS.test(fileExtension) && ALLOWED_EXTENSIONS.test(mimeType); 
     }
-    public areAllFilesValid(files) { 
+    public areAllFilesValid(files): boolean { 
         let file: IFile;
         for(let keyFormData in files) { // 'in' returns a string (the key), 'of' returns the value (only works with iterable objects)
             file = files[keyFormData];
@@ -20,19 +21,24 @@ class MulterFileOps {
         }
         return true;
     }
-    writeFile(file: IFile) { 
+    writeFile(file: IFile, newFileName: String): string { 
         let writableStream;
-        switch(file.dirStorageOption) {
-            case 0:
-                writableStream = fs.createWriteStream(
-                    path.join(__dirname, '../../public/medicalCertificateImage', `${file.originalname}`));
-                    break;
-            case 1:
-                writableStream = fs.createWriteStream(
-                    path.join(__dirname, '../../public/profileImage', `${file.originalname}`));
+        const filePath = path.join(__dirname, `${file.dirStorageOption}`, `${newFileName}`);
+        writableStream = fs.createWriteStream(filePath);
+        writableStream.write(file.buffer); 
+        return filePath;
+    }
+    public rearrangeFileStructure(rawFile): IFile {
+        let file: IFile = rawFile[0];
+        switch(file.fieldname) {
+            case KindOfImage.MEDICAL_CERTIFICATE_IMAGE:
+                file.dirStorageOption = `../../public/${KindOfImage.MEDICAL_CERTIFICATE_IMAGE}/`;
+                break;
+            case KindOfImage.PROFILE_IMAGE:
+                file.dirStorageOption = `../../public/${KindOfImage.PROFILE_IMAGE}/`;
                 break;
         }
-        writableStream.write(file.buffer); 
+        return file;
     }
     public getFileByIndex(index:number, files): IFile {
         let fileWrappedByArray: IFile[];
@@ -49,5 +55,3 @@ class MulterFileOps {
         }
     }
 }
-
-export default MulterFileOps;    

@@ -40,7 +40,7 @@ const validatePetBodyFields = [
     displayErrors,
     body('vaccines').not().isEmpty(),
     displayErrors,
-    body('owner').not().isEmpty(),
+    body('ownerId').not().isEmpty(),
     displayErrors,
 ]
 const validateUserBodyFields = [

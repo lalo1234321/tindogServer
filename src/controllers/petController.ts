@@ -1,20 +1,23 @@
 import {Request, Response} from 'express';
-import IFile from '../interfaces/IFile';
-import * as path from "path";
+import IFile, {KindOfImage} from '../interfaces/IFile';
 import Pet from "../models/petModel"; 
-import MulterFileOps from "../utils/MulterFileOps";
+import { MulterFileOps } from "../utils/MulterFileOps";
+import { Types } from 'mongoose';
 const fileOps = new MulterFileOps();
 
 export const registerPet = (req: Request, res: Response) => { 
     if(fileOps.areAllFilesValid(req.files)) { 
-        const setOfFilesLength = Object.entries(req.files).length;
+        let listOfFilePaths = {};
         let file: IFile;
-        for(let index = 0; index < setOfFilesLength; index++) {
-            file = fileOps.getFileByIndex(index, req.files);//TODO Refactor code
-            file.dirStorageOption = index;
-            fileOps.writeFile(file);
+        const petId = new Types.ObjectId();
+        for(let key in req.files) {
+            let rawFile = req.files[`${key}`];
+            file = fileOps.rearrangeFileStructure(rawFile);
+            let extension = file.originalname.split('.')[1];
+            let newFileName = `${petId}.${extension}`;  
+            let filePath = fileOps.writeFile(file, newFileName);
+            listOfFilePaths[`${key}`] = filePath;
         }
-        const hostname = 'localhost:8080';
         const petDoc = new Pet({
             username: req.body.username,
             name: req.body.name,
@@ -22,8 +25,8 @@ export const registerPet = (req: Request, res: Response) => {
             specie: req.body.specie,
             breed: req.body.breed,
             vaccines: req.body.vaccines,
-            profileImagePath: path.join(hostname, 'profileImagePath', fileOps.getFileByIndex(0, req.files).originalname),
-            medicalCertificateImagePath: path.join(hostname, 'medicalCertificateImage',fileOps.getFileByIndex(1, req.files).originalname),
+            profileImage: listOfFilePaths[`${KindOfImage.PROFILE_IMAGE}`],
+            medicalCertificateImage: listOfFilePaths[`${KindOfImage.MEDICAL_CERTIFICATE_IMAGE}`],
             owner: req.body.owner
         })
         petDoc.save();
@@ -47,12 +50,26 @@ export const registerPet = (req: Request, res: Response) => {
     }) 
 } 
 
-export const retrievePetImage = (req: Request, res: Response) => {
+export const retrievePetImage = async (req: Request, res: Response) => {
+    const petId = req.params.petId;
     const hostname= 'localhost:8080';
-    const path = 'profileImage';
-    const fileName = 'profileImage.jpeg';
-    res.status(200).json({
-        message: "Profile Image",
-        img: `${hostname}/${path}/${fileName}`
+    const path = req.params.kindOfImage;
+
+    Pet.findById(petId, (err, petDoc) => {
+        if(err)
+            return res.status(404).json({
+                err: err.message
+            })
+        if(!petDoc)
+            return res.status(404).json({
+                message: 'The pet does not exist'
+            })
+        let pathTokes: string[] = petDoc[`${path}`].split('\\');
+        let fileName = pathTokes[pathTokes.length - 1];
+        const imageURI = `${hostname}/${path}/${fileName}`;
+        res.status(200).json({
+            message: path == KindOfImage.PROFILE_IMAGE ? "Profile Image": "Medical Certificate Image",
+            img: imageURI
+        })
     })
 }

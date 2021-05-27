@@ -16,7 +16,7 @@ const validatePetFormData = upload.fields([
     {name: "specie"},
     {name: "breed"},
     {name: "vaccines"},
-    {name: "owner"},
+    {name: "ownerId"},
     {name: "medicalCertificateImage"},
     {name: "profileImage"},
 ])

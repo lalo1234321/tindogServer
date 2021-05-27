@@ -24,13 +24,11 @@ let petScheme = new Schema({
         default: ''
     },
     vaccines: [{type:String}],
-    profileImagePath: {
+    profileImage: {
         type: String,
-        required: true 
     },
-    medicalCertificateImagePath: {
+    medicalCertificateImage: {
         type: String,
-        required: true
     },
     isDeleted: {
         type: Boolean,
