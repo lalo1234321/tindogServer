@@ -5,7 +5,7 @@ import { MulterFileOps } from "../utils/MulterFileOps";
 import { Types } from 'mongoose';
 const fileOps = new MulterFileOps();
 
-export const registerPet = (req: Request, res: Response) => { 
+export const registerPet = async (req: Request, res: Response) => { 
     if(fileOps.areAllFilesValid(req.files)) { 
         let listOfFilePaths = {};
         let file: IFile;
@@ -29,20 +29,25 @@ export const registerPet = (req: Request, res: Response) => {
             medicalCertificateImage: listOfFilePaths[`${KindOfImage.MEDICAL_CERTIFICATE_IMAGE}`],
             owner: req.body.owner
         })
-        petDoc.save();
-
-        return res.status(200).json({
-            "message": "Pet registered",
-            "petInfo": { 
-                "username": req.body.username,
-                "name": req.body.name,
-                "age": req.body.age,
-                "specie": req.body.specie,
-                "breed": req.body.breed,
-                "vaccines": req.body.vaccines,
-                "owner": req.body.owner
-            } 
-        })
+        try {
+            await petDoc.save();
+            return res.status(200).json({
+                "message": "Pet registered",
+                "petInfo": { 
+                    "username": req.body.username,
+                    "name": req.body.name,
+                    "age": req.body.age,
+                    "specie": req.body.specie,
+                    "breed": req.body.breed,
+                    "vaccines": req.body.vaccines,
+                    "owner": req.body.owner
+                } 
+            })
+        }catch(err) {
+            return res.status(400).json({
+                error: err.message
+            })
+        }
     }
 
     return res.status(400).json({
