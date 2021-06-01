@@ -6,6 +6,7 @@ const { validarJWT } = require('../middleware/validateJwt');
 import { check } from 'express-validator';
 import {register}  from '../controllers/user';
 const { validarCampos, validarEdad } = require('../middleware/validateFields');
+import {confirmation} from '../controllers/confirmation';
 
 const userController = { 
     register: register
@@ -66,4 +67,5 @@ router.post('/register',[
     validarEdad
 ], userController.register);
 
+router.get('/confirmation/:token', confirmation);
 export default router;

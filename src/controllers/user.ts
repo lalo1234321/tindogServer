@@ -1,6 +1,9 @@
 import { Request, Response } from 'express';
 import * as bcrypt from 'bcrypt';
 import User from '../models/userModel';
+const { sendEmail } = require('../utils/sendEmail');
+
+const jwt = require('jsonwebtoken');
 
 const register = async(req: Request, res: Response) => {
     console.log('dentro del método');
@@ -11,6 +14,18 @@ const register = async(req: Request, res: Response) => {
     try{
         const user = new User(body);
         await user.save();
+        jwt.sign( {id: user._id}, process.env.JWT_KEY, {expiresIn: '48h'},
+            (err, token) => {
+                if (err){
+                    console.error(err);
+                    return res.status(400).json({
+                        error: err 
+                    });
+                }
+                console.log(`token: ${token}`);
+                sendEmail(req.body.email, token);
+            }
+        );
         res.status(200).json({
             msg: "usuario guardado"            
         });
