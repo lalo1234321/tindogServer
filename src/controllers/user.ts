@@ -23,7 +23,14 @@ const register = async(req: Request, res: Response) => {
                     });
                 }
                 console.log(`token: ${token}`);
-                sendEmail(req.body.email, token);
+                try{
+                    sendEmail(req.body.email, token);
+                }catch(err){
+                    console.error(err);
+                    return res.status(500).json({
+                        msg: err
+                    });
+                }
             }
         );
         res.status(200).json({
