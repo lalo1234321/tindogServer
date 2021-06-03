@@ -27,7 +27,7 @@ export const registerPet = async (req: Request, res: Response) => {
             vaccines: req.body.vaccines,
             profileImage: listOfFilePaths[`${KindOfImage.PROFILE_IMAGE}`],
             medicalCertificateImage: listOfFilePaths[`${KindOfImage.MEDICAL_CERTIFICATE_IMAGE}`],
-            owner: req.body.owner
+            owner: req.userId
         })
         try {
             await petDoc.save();
