@@ -40,8 +40,6 @@ const validatePetBodyFields = [
     displayErrors,
     body('vaccines').not().isEmpty(),
     displayErrors,
-    body('ownerId').not().isEmpty(),
-    displayErrors,
 ]
 const validateUserBodyFields = [
     check('firstName', 'El nombre es obligatorio').notEmpty(),

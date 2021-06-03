@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 import User from "../models/userModel";
 
 const validateOwner = async (req: Request, res: Response, next) => {
-    const ownerId = req.body.ownerId;
+    const ownerId = req.userId;
     try {
         const petDoc = await User.findById(ownerId);
         if(!petDoc)

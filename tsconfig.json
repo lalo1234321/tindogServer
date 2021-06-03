@@ -1,9 +1,10 @@
 {
     "compilerOptions": {
-        "target": "es6",
+        "target": "es5",
         "module": "CommonJS",
         "outDir": "dist",
-        "sourceMap": true
+        "sourceMap": true,
+        "esModuleInterop": true
     },
     "include": [
         "src/**/*.ts"
@@ -11,5 +12,5 @@
     "exclude": [
         "node_modules"
     ],
-    "files": ["types.d.ts"]
+    "files": ["types.d.ts"],
 }

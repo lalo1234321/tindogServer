@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import * as path from 'path';
-import * as multer from "multer";
+import multer from "multer";
 
 //Config Storage Engine
 const storage: multer.StorageEngine = multer.memoryStorage();
@@ -16,7 +16,6 @@ const validatePetFormData = upload.fields([
     {name: "specie"},
     {name: "breed"},
     {name: "vaccines"},
-    {name: "ownerId"},
     {name: "medicalCertificateImage"},
     {name: "profileImage"},
 ])
