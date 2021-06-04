@@ -3,6 +3,7 @@ import IFile, {KindOfImage} from '../interfaces/IFile';
 import Pet from "../models/petModel"; 
 import { MulterFileOps } from "../utils/MulterFileOps";
 import { Types } from 'mongoose';
+import User from '../models/userModel';
 const fileOps = new MulterFileOps();
 
 export const registerPet = async (req: Request, res: Response) => { 
@@ -31,6 +32,9 @@ export const registerPet = async (req: Request, res: Response) => {
         })
         try {
             await petDoc.save();
+            const userDoc = await User.findById(req.userId).exec();
+            userDoc.ownedPets.push(petDoc._doc);
+            await userDoc.save();
             return res.status(200).json({
                 "message": "Pet registered",
                 "petInfo": { 

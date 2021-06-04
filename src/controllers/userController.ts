@@ -35,8 +35,8 @@ export const registerUser = async(req: Request, res: Response) => {
         });
     }
 }
-export const getAllUsersWithTheirPets = (req: Request, res: Response) => {
-    let query = User.find().populate('ownedPets')
+export const getAllPetsOwnedByUser = (req: Request, res: Response) => {
+    let query = User.find({_id: req.userId}).populate('ownedPets')
     query.exec((err, userDoc) => { 
         res.json({
             result: userDoc
