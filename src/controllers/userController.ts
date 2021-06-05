@@ -5,7 +5,7 @@ const { sendEmail } = require('../utils/sendEmail');
 
 const jwt = require('jsonwebtoken');
 
-const register = async(req: Request, res: Response) => {
+export const registerUser = async(req: Request, res: Response) => {
     console.log('dentro del método');
     let body = req.body;
     let password = body.password;
@@ -41,9 +41,12 @@ const register = async(req: Request, res: Response) => {
             err
         });
     }
-};
-
-
-export {
-    register
 }
+export const getAllUsersWithTheirPets = (req: Request, res: Response) => {
+    let query = User.find().populate('ownedPets')
+    query.exec((err, userDoc) => { 
+        res.json({
+            result: userDoc
+        })
+    })
+};
