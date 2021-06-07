@@ -70,7 +70,7 @@ export const retrievePetImage = async (req: Request, res: Response) => {
                 message: 'The pet does not exist'
             })
         let pathTokes: string[];
-        if(process.platform === 'win32')
+        if(process.platform === "win32")
             pathTokes = petDoc[`${path}`].split('\\');
         else
             pathTokes = petDoc[`${path}`].split('/');
