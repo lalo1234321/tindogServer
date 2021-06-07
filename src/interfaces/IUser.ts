@@ -9,6 +9,8 @@ export interface IUser extends Document {
     userName: string;
     password:string;
     peso:string;
+    emailConfirmed:boolean
+    premiun:boolean
 }
 
 export default IUser;

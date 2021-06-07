@@ -58,6 +58,10 @@ let userScheme = new Schema({
         type: Boolean,
         default: false
     },
+    premium: {
+        type: Boolean,
+        default: false
+    },
     ownedPets:[{
         type: Schema.Types.ObjectId,
        ref: 'pets'     
