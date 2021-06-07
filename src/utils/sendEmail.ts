@@ -3,9 +3,6 @@ const nodemailer = require("nodemailer");
 require('dotenv').config();
 
 const sendEmail = async(destiny, token) => {
-    let testAccount = await nodemailer.createTestAccount();
-  
-   
     let transporter = nodemailer.createTransport({
       service: 'Outlook',
       auth: {
@@ -17,7 +14,7 @@ const sendEmail = async(destiny, token) => {
     // send mail with defined transport object
     let info = await transporter.sendMail({
       from: `Tindog <${process.env.account}>`,
-      //Abraham Morales" <abraham301000@hotmail.com>', // sender address
+      // sender address
       to: destiny, // list of receivers
       subject: "Verificación de correo", // Subject line
       html: `Click to confirm email: <a href="${url}">${url}</a>`

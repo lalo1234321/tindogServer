@@ -18,6 +18,11 @@ const login = async(req: Request, res: Response) => {
                 msg:"Usuario no encontrado"
             });
         }
+        if (!user.emailConfirmed) {
+            return res.status(400).json({
+                msg: "Correo no confirmado"
+            });
+        }
         const validPassword = await bcrypt.compare(passwordBody, user.password);
         if( !validPassword ) {
             return res.status(400).json({
