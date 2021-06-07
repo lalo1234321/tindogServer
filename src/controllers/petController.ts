@@ -69,7 +69,11 @@ export const retrievePetImage = async (req: Request, res: Response) => {
             return res.status(404).json({
                 message: 'The pet does not exist'
             })
-        let pathTokes: string[] = petDoc[`${path}`].split('\\');
+        let pathTokes: string[];
+        if(process.platform === 'win32')
+            pathTokes = petDoc[`${path}`].split('\\');
+        else
+            pathTokes = petDoc[`${path}`].split('/');
         let fileName = pathTokes[pathTokes.length - 1];
         const imageURI = `${hostname}/${path}/${fileName}`;
         res.status(200).json({
