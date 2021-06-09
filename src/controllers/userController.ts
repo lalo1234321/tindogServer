@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import * as bcrypt from 'bcrypt';
-import User from '../models/userModel';
+import User from '../mongoose-models/userModel';
+import Pet from "../mongoose-models/petModel";
+import { KindOfImage } from '../interfaces/IFile';
 const { sendEmail } = require('../utils/sendEmail');
 
 const jwt = require('jsonwebtoken');
@@ -44,9 +46,14 @@ export const registerUser = async(req: Request, res: Response) => {
 }
 export const getAllPetsOwnedByUser = (req: Request, res: Response) => {
     let query = User.find({_id: req.userId}).populate('ownedPets')
-    query.exec((err, userDoc) => { 
-        res.json({
-            result: userDoc
-        })
+       
+    query.select('ownedPets').exec((err, userDoc) => { 
+        if(err)
+            return res.status(404).json({
+                err
+            })
+        res.json(
+            userDoc
+        )
     })
 };

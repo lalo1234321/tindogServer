@@ -1,16 +1,16 @@
 import { Document } from "mongoose";
+import { IPet } from "./IPet";
 
 export interface IUser extends Document {
-    
-
     email: string;
     firstName: string;
     lastName: string;
     userName: string;
     password:string;
     peso:string;
-    emailConfirmed:boolean
-    premiun:boolean
+    ownedPets: Array<IPet>;
+    emailConfirmed:boolean;
+    premium: boolean;
 }
 
 export default IUser;
