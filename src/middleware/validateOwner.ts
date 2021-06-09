@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
 import { Types } from "mongoose";
-import User from "../models/userModel";
+import User from "../mongoose-models/userModel";
 
 const validateOwner = async (req: Request, res: Response, next) => {
     const ownerId = req.userId;

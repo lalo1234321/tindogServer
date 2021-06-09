@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 const jwt = require('jsonwebtoken');
 import { IUser } from "../interfaces/IUser";
-import User from '../models/userModel'; 
+import User from '../mongoose-models/userModel'; 
 
 const deleteUser = async(req: Request, res: Response) => {
     const token = req.headers.token;

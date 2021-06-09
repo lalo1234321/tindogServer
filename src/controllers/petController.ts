@@ -1,8 +1,10 @@
 import {Request, Response} from 'express';
 import IFile, {KindOfImage} from '../interfaces/IFile';
-import Pet from "../models/petModel"; 
+import Pet from "../mongoose-models/petModel"; 
 import { MulterFileOps } from "../utils/MulterFileOps";
 import { Types } from 'mongoose';
+import User from '../mongoose-models/userModel';
+import { generateURI_forFile } from '../utils/generateURI';
 const fileOps = new MulterFileOps();
 
 export const registerPet = async (req: Request, res: Response) => { 
@@ -19,18 +21,25 @@ export const registerPet = async (req: Request, res: Response) => {
             listOfFilePaths[`${key}`] = filePath;
         }
         const petDoc = new Pet({
+            _id: petId,
             username: req.body.username,
             name: req.body.name,
             age: req.body.age,
             specie: req.body.specie,
             breed: req.body.breed,
             vaccines: req.body.vaccines,
-            profileImage: listOfFilePaths[`${KindOfImage.PROFILE_IMAGE}`],
-            medicalCertificateImage: listOfFilePaths[`${KindOfImage.MEDICAL_CERTIFICATE_IMAGE}`],
+            gender: req.body.gender,
+            profileImagePhysicalPath: listOfFilePaths[`${KindOfImage.PROFILE_IMAGE}`],
+            medicalCertificateImagePhysicalPath: listOfFilePaths[`${KindOfImage.MEDICAL_CERTIFICATE_IMAGE}`],
+            profileImageURI: generateURI_forFile(listOfFilePaths[`${KindOfImage.PROFILE_IMAGE}`]),
+            medicalCertificateImageURI: generateURI_forFile(listOfFilePaths[`${KindOfImage.MEDICAL_CERTIFICATE_IMAGE}`]),
             owner: req.userId
         })
         try {
             await petDoc.save();
+            const userDoc = await User.findById(req.userId).exec();
+            userDoc.ownedPets.push(petDoc);
+            await userDoc.save();
             return res.status(200).json({
                 "message": "Pet registered",
                 "petInfo": { 

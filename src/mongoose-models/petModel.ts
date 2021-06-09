@@ -1,4 +1,5 @@
-import {Schema, model} from 'mongoose'; 
+import {Schema, model, Model} from 'mongoose'; 
+import { IPet } from '../interfaces/IPet';
 
 
 let petScheme = new Schema({
@@ -19,15 +20,25 @@ let petScheme = new Schema({
         type: String,
         required: true
     },
+    gender: {
+        type: String,
+        required: true
+    },
     breed: {
         type: String,
         default: ''
     },
     vaccines: [{type:String}],
-    profileImage: {
+    profileImagePhysicalPath: {
         type: String,
     },
-    medicalCertificateImage: {
+    medicalCertificateImagePhysicalPath: {
+        type: String,
+    },
+    profileImageURI: {
+        type: String,
+    },
+    medicalCertificateImageURI: {
         type: String,
     },
     isDeleted: {
@@ -37,9 +48,10 @@ let petScheme = new Schema({
     owner: {
         type: Schema.Types.ObjectId,
         ref: 'users' 
-    }
+    }//TODO gender
 },
     {timestamps: true});
 
 
-export default model('pets', petScheme);
+const petModel: Model<IPet> = model<IPet>('pets', petScheme);
+export default petModel;
