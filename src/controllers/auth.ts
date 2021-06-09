@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import User from '../models/userModel'; 
+import User from '../mongoose-models/userModel'; 
 import * as bcrypt from 'bcrypt';
 import { IUser } from "../interfaces/IUser";
 const { generarJWT } = require('../utils/jwt');

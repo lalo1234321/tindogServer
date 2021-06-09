@@ -1,6 +1,6 @@
 import { IUser } from "../interfaces/IUser";
 import { Request, Response } from 'express';
-import User from '../models/userModel';
+import User from '../mongoose-models/userModel';
 
 const jwt= require('jsonwebtoken');
 
