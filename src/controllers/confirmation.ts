@@ -2,10 +2,9 @@ import { IUser } from "../interfaces/IUser";
 import { Request, Response } from 'express';
 import User from '../mongoose-models/userModel';
 
-const jwt= require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
 const confirmation = (req:Request, res:Response) => {
-    
     let tok = req.params.token;
     jwt.verify( tok, process.env.JWT_KEY, async (err, decoded) => {
         if(err){

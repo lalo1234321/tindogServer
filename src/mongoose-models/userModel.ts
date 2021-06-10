@@ -62,6 +62,10 @@ let userScheme = new Schema({
         type: Boolean,
         default: false
     },
+    datePlan:[{
+        type: Date,
+        default: null
+    }],
     ownedPets:[{
         type: Schema.Types.ObjectId,
        ref: 'pets'     
