@@ -23,7 +23,8 @@ const validatePetFormData = upload.fields([
 const validateUploadedFiles = (req: Request, res: Response, next) => {
     if(Object.entries(req.files).length !== 2) 
         return res.status(404).json({
-            message: 'Please upload the Profile Image & Medical Certificate Image'
+            //message: 'Please upload the Profile Image & Medical Certificate Image'
+            message: 'Subir la imagen de perfil y certificado médico'
         })
     next();
 }

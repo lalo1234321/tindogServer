@@ -5,7 +5,7 @@ const validateJWT = ( req:Request, res:Response, next:NextFunction ) => {
     const token = req.header('token');
     if( !token ) {
         return res.status(401).json({
-            msg: 'There is no token in the request'
+            message: 'There is no token in the request'
         });
     }
 
@@ -15,7 +15,7 @@ const validateJWT = ( req:Request, res:Response, next:NextFunction ) => {
         next();
     } catch(err) {
         return res.status(401).json({
-            msg: 'No valid token'
+            message: 'No valid token'
         });
     } 
 }

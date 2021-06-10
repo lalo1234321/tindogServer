@@ -44,9 +44,11 @@ export class MulterFileOps {
         let fileWrappedByArray: IFile[];
         let i = 0;
         if(Object.entries(files).length > 2)
-            throw Error('Files set length exceeded');
+            throw Error('Maximo de archivos excedido');
+            //throw Error('Files set length exceeded');
         if(Object.entries(files).length < 0)
-            throw Error('Index number negative');
+            throw Error('Índice negativo');
+            //throw Error('Index number negative');
         for(let formDataKey in files) { // 'in' returns a string (the key), 'of' returns the value (only works with iterable objects)
             fileWrappedByArray = files[formDataKey];
             if(i == index)

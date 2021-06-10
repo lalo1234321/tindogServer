@@ -41,7 +41,7 @@ export const registerPet = async (req: Request, res: Response) => {
             userDoc.ownedPets.push(petDoc);
             await userDoc.save();
             return res.status(200).json({
-                "message": "Pet registered",
+                "message": "Mascota registrada",
                 "petInfo": { 
                     "username": req.body.username,
                     "name": req.body.name,
@@ -54,7 +54,7 @@ export const registerPet = async (req: Request, res: Response) => {
             })
         }catch(err) {
             return res.status(400).json({
-                error: err.message
+                message: err.message
             })
         }
     }
@@ -72,11 +72,11 @@ export const retrievePetImage = async (req: Request, res: Response) => {
     Pet.findById(petId, (err, petDoc) => {
         if(err)
             return res.status(404).json({
-                err: err.message
+                message: err.message
             })
         if(!petDoc)
             return res.status(404).json({
-                message: 'The pet does not exist'
+                message: 'La mascota no existe'
             })
         let pathTokes: string[];
         if(process.platform === "win32")

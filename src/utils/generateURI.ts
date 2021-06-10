@@ -26,8 +26,8 @@ export const generateURI_forModelTest = async <T extends Document>(id: Types.Obj
     
     const petDoc = await Pet.findById(id).exec(); 
     if(!petDoc)
-        throw new Error('The pet does not exist');
-        
+        throw new Error('La mascota no existe');
+        //throw new Error('The pet does not exist');
     let pathTokes: string[];
     if(process.platform === "win32")
         pathTokes = petDoc[`${path}`].split('\\');

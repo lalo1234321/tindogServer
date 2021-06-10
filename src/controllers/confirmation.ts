@@ -11,15 +11,15 @@ const confirmation = (req:Request, res:Response) => {
         if(err){
             console.error(err);
             return res.status(400).json({
-                error: err
+                message: err
             });
         }
         const user:IUser = await User.findOneAndUpdate({_id: (<any>decoded).id},
             {emailConfirmed: true}, {new: true});
         return res.status(200).json({
             validToken: true,
-        msg: "Correo confirmado",
-        user: user
+            message: "Correo confirmado",
+            user: user
         });
     });
 }

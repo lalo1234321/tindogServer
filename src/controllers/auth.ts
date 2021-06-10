@@ -15,18 +15,18 @@ const login = async(req: Request, res: Response) => {
         const user:IUser = await User.findOne({email: req.body.email});
         if( !user ) {
             return res.status(400).json({
-                msg:"Usuario no encontrado"
+                message:"Usuario no encontrado"
             });
         }
         if (!user.emailConfirmed) {
             return res.status(400).json({
-                msg: "Correo no confirmado"
+                message: "Correo no confirmado"
             });
         }
         const validPassword = await bcrypt.compare(passwordBody, user.password);
         if( !validPassword ) {
             return res.status(400).json({
-                msg:'Las credenciales no coinciden'
+                message:'Las credenciales no coinciden'
             });
         }
         const token = await generarJWT( user._id );
@@ -37,7 +37,7 @@ const login = async(req: Request, res: Response) => {
 
     } catch( err ) {
         return res.status(500).json({
-            msg:'Ocurrió un error, hablé con el administrador!'
+            message:'Ocurrió un error, hable con el administrador!'
         });
     }
 

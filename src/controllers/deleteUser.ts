@@ -7,7 +7,7 @@ const deleteUser = async(req: Request, res: Response) => {
     const token = req.headers.token;
     if (!token) {
         return res.status(400).json({
-            msg: "Token no introducido"
+            message: "Token no introducido"
         });
     }
     try{
@@ -16,12 +16,12 @@ const deleteUser = async(req: Request, res: Response) => {
             {isDeleted: true}, {new: true});
         return res.status(200).json({
             validToken: true,
-            msg: "Usuario eliminado",
+            message: "Usuario eliminado",
             user: user
         });
     }catch(err){
         return res.status(500).json({
-            msg: 'Ha ocurrido un error validando el token',
+            message: 'Ha ocurrido un error validando el token',
             token: token
         });
     }
