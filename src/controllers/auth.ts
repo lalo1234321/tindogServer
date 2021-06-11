@@ -46,8 +46,10 @@ const login = async(req: Request, res: Response) => {
 const renewToken = async( req: Request, res: Response ) => {
     try{
         const userId = req.userId;
+        const user = await User.findById( userId );
         const token = await generarJWT( userId );
         res.status(200).json({
+            user,
             token
         });
     }catch( err ) {
