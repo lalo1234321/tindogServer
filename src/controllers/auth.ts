@@ -43,6 +43,22 @@ const login = async(req: Request, res: Response) => {
 
 }
 
+const renewToken = async( req: Request, res: Response ) => {
+    try{
+        const userId = req.userId;
+        const token = await generarJWT( userId );
+        res.status(200).json({
+            token
+        });
+    }catch( err ) {
+        res.status(500).json({
+            messsage: "Error en el servidor"
+        });
+    }
+
+};
+
 export {
-    login
+    login,
+    renewToken
 }
