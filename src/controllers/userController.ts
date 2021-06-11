@@ -19,28 +19,26 @@ export const registerUser = async(req: Request, res: Response) => {
         jwt.sign( {id: user._id}, process.env.JWT_KEY, {expiresIn: '48h'},
             (err, token) => {
                 if (err){
-                    console.error(err);
                     return res.status(400).json({
-                        error: err 
+                        message: err 
                     });
                 }
                 console.log(`token: ${token}`);
                 try{
                     sendEmail(req.body.email, token);
                 }catch(err){
-                    console.error(err);
                     return res.status(500).json({
-                        msg: err
+                        message: err
                     });
                 }
             }
         );
         res.status(200).json({
-            msg: "usuario guardado"            
+            message: "Usuario guardado correctamente"            
         });
     } catch(err) {
         res.status(500).json({
-            err
+            message: err
         });
     }
 }
@@ -50,7 +48,7 @@ export const getAllPetsOwnedByUser = (req: Request, res: Response) => {
     query.select('ownedPets').exec((err, userDoc) => { 
         if(err)
             return res.status(404).json({
-                err
+                message: err
             })
         res.json(
             userDoc

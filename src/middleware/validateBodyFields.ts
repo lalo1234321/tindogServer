@@ -5,10 +5,10 @@ import { ageValidator } from "./customChecks/customUserChecks";
 
 export const displayErrors = (req: Request, res: Response, next) => {
     let errors: Result = validationResult(req); 
-    const errorFormatter = ({ location, msg, param, value, nestedErrors }) => {
+    const errorFormatter = ({ location, msg: message, param, value, nestedErrors }) => {
         let paramStr: string = param;
         // Build your resulting errors however you want! String, object, whatever - it works!
-        return `${msg} for ${paramStr.toUpperCase()}`;
+        return `${message}`;
       };
     errors = errors.formatWith(errorFormatter);//'errors' has all the recovered validation errors through the sequential validation process 
     
