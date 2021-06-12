@@ -7,7 +7,13 @@ import User from '../mongoose-models/userModel';
 import { generateURI_forFile } from '../utils/generateURI';
 const fileOps = new MulterFileOps();
 
-export const registerPet = async (req: Request, res: Response) => { 
+export const registerPet = async (req: Request, res: Response) => {
+    let age = req.body.age;
+    if (age < 1 || age > 100) {
+        return res.status(400).json({
+            message: 'Edad de mascota no válida'
+        });
+    } 
     if(fileOps.areAllFilesValid(req.files)) { 
         let listOfFilePaths = {};
         let file: IFile;
