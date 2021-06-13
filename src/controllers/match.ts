@@ -25,7 +25,8 @@ const match = async (req:Request, res:Response) => {
         console.log('antes del array');
         
         let possibleMatch =  await Pet.find({specie: pet.specie, age: {$gte: aux, $lte: aux1},
-            gender: {$ne: pet.gender}, isDeleted: false, owner: {$ne: pet.owner}});
+            gender: {$ne: pet.gender}, isDeleted: false, owner: {$ne: pet.owner}})
+            .populate('owner');
         return res.status(200).json({
             validToken: true,
             message: "Mascotas seleccionadas correctamente",
