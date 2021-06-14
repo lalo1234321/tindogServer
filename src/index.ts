@@ -4,6 +4,11 @@ require('dotenv').config();
 const app = express();
 const morgan = require('morgan');
 const cors = require('cors'); 
+
+// app.set('port', process.env.PORT || 8080);
+// server.listen(app.get('port'));
+//server.listen(8080, "192.168.100.6");
+
 import userRoutes from "./routes/userRoutes";
 import petRoutes from "./routes/petRoutes";
 import login from './routes/auth';
@@ -20,10 +25,15 @@ app.use(express.static('public'));
 
 app.use(deleteUser);
 
+const server  = require('http').createServer(app);
+module.exports.io = require('socket.io')(server);
+require('./sockets/socket');
+
+
 const { conectionDB } = require('./config/mongoConfig.js'); 
 conectionDB();
 
-module.exports = app.listen(process.env.PORT, () => {
+module.exports = server.listen(process.env.PORT, () => {
     console.log(`Server on port ${process.env.PORT}`);   
 });
 
