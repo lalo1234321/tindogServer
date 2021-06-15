@@ -3,7 +3,7 @@ import { Types, Document } from "mongoose";
 export interface IPet extends Document<any, {}> {
     username: String;
     name: String;
-    age: Number;
+    age: number;
     specie: String;
     breed: String;
     gender: String;
