@@ -12,6 +12,7 @@ export interface IUser extends Document {
     emailConfirmed:boolean;
     premium: boolean;
     datePlan: Date[],
+    isOnline: boolean
 }
 
 export default IUser;
