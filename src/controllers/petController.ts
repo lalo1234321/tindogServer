@@ -5,6 +5,7 @@ import { MulterFileOps } from "../utils/MulterFileOps";
 import { Types } from 'mongoose';
 import User from '../mongoose-models/userModel';
 import { generateURI_forFile } from '../utils/generateURI';
+import Notification from '../mongoose-models/notificationModel';
 const fileOps = new MulterFileOps();
 
 export const registerPet = async (req: Request, res: Response) => {
@@ -96,4 +97,35 @@ export const retrievePetImage = async (req: Request, res: Response) => {
             img: imageURI
         })
     })
+}
+
+
+export const retrievePetNotifications = async (req: Request, res: Response) => {
+    const petUserName = req.params.petUserName;
+    try {
+        const results = await Notification.find({to:petUserName});
+        res.status(200).json({
+            results
+        });
+    }catch (err) {
+        res.status(500).json({
+            message: 'Problemas al obtener las notifiaciones'
+        });
+    }
+}
+
+
+export const deletePetNotification = async (req: Request, res: Response) => {
+    const notificationId = req.params.notificationId;
+    try {
+        const result = await Notification.findOneAndDelete({_id:notificationId});
+        result.delete()
+        res.status(200).json({
+            message: 'Notificación eliminada'
+        });
+    }catch (err) {
+        res.status(500).json({
+            message: 'Problemas al eliminar la notificación'
+        });
+    }
 }

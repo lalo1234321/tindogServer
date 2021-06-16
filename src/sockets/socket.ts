@@ -15,6 +15,7 @@ io.on('connection', client => {
     client.join( petUserName );
     client.on('notify', async(payload) => {
         console.log(payload);
+        await socketController.registerNotification(payload.from, payload.to);
         io.to(payload.to).emit('notify',payload);
     });
     client.on('disconnect', () => {

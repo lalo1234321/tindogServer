@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { registerPet, retrievePetImage } from "../controllers/petController";
+import { deletePetNotification, registerPet, retrievePetImage, retrievePetNotifications } from "../controllers/petController";
 import { validatePetBodyFields } from "../middleware/validateBodyFields"; 
 import { validatePetFormData, validateUploadedFiles } from "../middleware/validateMediaFields"; 
 import  { validateJWT }  from "../middleware/validateJWT";
@@ -12,5 +12,7 @@ const router = Router();
 router.post('/pet', validateJWT,petAgeValidator, validatePetFormData, validatePetBodyFields, validateUploadedFiles, validateOwner, registerPet);
 router.get('/pet/image/:kindOfImage/:petId', validateJWT, retrievePetImage);
 router.get('/pet/match/:id', match);
+router.get('/pet/notifications/:petUserName', validateJWT,retrievePetNotifications);
+router.delete('/pet/notifications/:notificationId',validateJWT,deletePetNotification);
 
 export default router;
