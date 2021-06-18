@@ -6,6 +6,10 @@ import { Types } from 'mongoose';
 import User from '../mongoose-models/userModel';
 import { generateURI_forFile } from '../utils/generateURI';
 import Notification from '../mongoose-models/notificationModel';
+import AcceptedPets from '../mongoose-models/acceptedPetsModel';
+import { IAcceptedPets } from '../interfaces/IAcceptedPets';
+import { IPet } from '../interfaces/IPet';
+import Message from '../mongoose-models/messageModel';
 const fileOps = new MulterFileOps();
 
 export const registerPet = async (req: Request, res: Response) => {
@@ -128,4 +132,137 @@ export const deletePetNotification = async (req: Request, res: Response) => {
             message: 'Problemas al eliminar la notificación'
         });
     }
+}
+
+export const createAcceptedModel = async(req: Request, res: Response) => {
+    let idPet = req.params.idPet;
+    console.log(idPet);
+    try {
+        const accepted = new AcceptedPets({
+            myPet: idPet
+        });
+        await accepted.save();
+        res.status(200).json({
+            message:'modelo de aceptación creado'
+        });
+    } catch( err ) {
+        console.log(err.message);
+        res.status(500).json({
+            err
+        });
+    }
+    
+    
+}
+
+export const acceptPetChat = async(req: Request, res: Response) => {
+    let idPet = req.params.idPet;
+    let petUserName = req.params.petUserName;
+    console.log(idPet);
+    console.log(petUserName);
+    try {
+        
+        let  accepted:any = await AcceptedPets.findOne({myPet:idPet}).exec();
+        if( !accepted ) {
+            accepted = new AcceptedPets({
+                myPet: idPet
+            });
+        }
+        const newPet:any = await Pet.findOne({username: petUserName});
+
+        if(!accepted.acceptedPets.includes(newPet._id)){
+            accepted.acceptedPets.push(newPet._id);
+            await accepted.save();
+        }
+            
+        
+        // accepted.acceptedPets.push(newPet._id);
+        // await accepted.save();
+
+        let acceptedOther:any = await AcceptedPets.findOne({myPet:newPet._id}).exec();
+        if( !acceptedOther ) {
+            acceptedOther = new AcceptedPets({
+                myPet: newPet._id
+            });
+        }
+        if(!acceptedOther.acceptedPets.includes(idPet)) {
+            acceptedOther.acceptedPets.push(idPet);
+            await acceptedOther.save();
+        }
+        // acceptedOther.acceptedPets.push(idPet);
+        // await acceptedOther.save();
+        res.status(200).json({
+            message:'modelo encontrado',
+            accepted,
+            acceptedOther
+        });
+    } catch( err ) {
+        console.log(err.message);
+        res.status(500).json({
+            message: "algo raro pasó"
+        });
+    }
+    
+    
+}
+
+export const retrieveChats = async(req: Request, res: Response) => {
+    let idPet = req.params.idPet;
+    
+    try {
+        
+        const accepted:any = await AcceptedPets.findOne({myPet:idPet})
+        .populate({
+            path: 'acceptedPets',
+            populate:{
+                path:'owner'
+            }
+        })
+        .exec();
+        
+
+        //const acceptedOther:any = await AcceptedPets.findOne({myPet:newPet._id}).exec();
+        
+        res.status(200).json({
+            message:'modelo encontrado',
+            accepted
+        });
+    } catch( err ) {
+        res.status(500).json({
+            message: "algo raro pasó"
+        });
+    }
+    
+    
+}
+
+
+export const retrieveMessages = async(req: Request, res: Response) => {
+    let myPetUserName = req.params.myPetUserName;
+    let otherPetUsarName = req.params.otherPetUsarName;
+    
+    try {
+        
+        const last30 = await Message.find({
+            $or: [{from: myPetUserName, to: otherPetUsarName}, {from:otherPetUsarName,to: myPetUserName}]
+        })
+        .sort({
+            createdAt:'desc'
+        })
+        .limit(30)
+        
+
+        //const acceptedOther:any = await AcceptedPets.findOne({myPet:newPet._id}).exec();
+        
+        res.status(200).json({
+            message:'mensajes obtenidos',
+            last30
+        });
+    } catch( err ) {
+        res.status(500).json({
+            message: "No pudimos obtener tus mensajes"
+        });
+    }
+    
+    
 }

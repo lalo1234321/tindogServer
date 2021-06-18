@@ -1,6 +1,7 @@
 import User from '../mongoose-models/userModel';
 import { IUser } from "../interfaces/IUser";
 import Notification from '../mongoose-models/notificationModel';
+import Message from '../mongoose-models/messageModel';
 
 const userOnline = async( uid = '' ) => {
     //console.log(uid);
@@ -27,8 +28,20 @@ const registerNotification = async( petFrom = '', petTo = '' ) => {
     await notification.save();
 }   
 
+const registerMessage = async(petFrom = '', petTo = '', msg = '') => {
+    const message = new Message({
+        from: petFrom,
+        to: petTo,
+        msg
+    });
+    await message.save();
+}
+
+
+
 module.exports = {
     userOnline,
     userOffline,
-    registerNotification
+    registerNotification,
+    registerMessage
 }

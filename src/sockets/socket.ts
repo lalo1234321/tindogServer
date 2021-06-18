@@ -18,6 +18,11 @@ io.on('connection', client => {
         await socketController.registerNotification(payload.from, payload.to);
         io.to(payload.to).emit('notify',payload);
     });
+    client.on('personal-message', async(payload) => {
+        console.log(payload);
+        await socketController.registerMessage( payload.from, payload.to, payload.msg );
+        io.to(payload.to).emit('personal-message',payload);
+    });
     client.on('disconnect', () => {
         console.log('Cliente descontectado');
         socketController.userOffline(uid);
