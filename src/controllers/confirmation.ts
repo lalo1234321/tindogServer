@@ -5,7 +5,6 @@ import User from '../models/userModel';
 const jwt= require('jsonwebtoken');
 
 const confirmation = (req:Request, res:Response) => {
-    
     let tok = req.params.token;
     jwt.verify( tok, process.env.JWT_KEY, async (err, decoded) => {
         if(err){
