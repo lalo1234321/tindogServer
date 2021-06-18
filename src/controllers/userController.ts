@@ -28,13 +28,13 @@ export const registerUser = async(req: Request, res: Response) => {
                     sendEmail(req.body.email, token);
                 }catch(err){
                     return res.status(500).json({
-                        message: err
+                        message: "No se pudo enviar el correo"
                     });
                 }
             }
         );
         res.status(200).json({
-            message: "Usuario guardado correctamente"            
+            message: "Usuario registrado con éxito \nVerifica tu correo!"            
         });
     } catch(err) {
         res.status(500).json({
