@@ -42,6 +42,7 @@ export const registerUser = async(req: Request, res: Response) => {
         });
     }
 }
+
 export const getAllPetsOwnedByUser = (req: Request, res: Response) => {
     let query = User.find({_id: req.userId}).populate('ownedPets')
        
@@ -55,3 +56,69 @@ export const getAllPetsOwnedByUser = (req: Request, res: Response) => {
         )
     })
 };
+
+export const updatePassword = async (req: Request, res: Response) => {
+    let id = req.userId;
+    let body = req.body;
+    let password = body.password;
+    password = bcrypt.hashSync(password, 5);
+    body.password = password;
+    try {
+        if (body.password.length>0) {
+            let userModify = await User.findByIdAndUpdate(id, {$set: {password: body.password}}, { new: true });
+            return res.status(200).json({
+                msg: "Contraseña modifcada con éxito."
+            });
+        } else {
+            return res.status(500).json({
+                msg: 'Esta vacia la contraseña, revise de nuevo.'
+            });
+        }
+    } catch (err) {
+        return res.status(500).json({
+            msg: 'Ha ocurrido un error.'
+        });
+    }
+}
+
+export const updateState = async (req: Request, res: Response) => {  
+    let id = req.userId;
+    let body = req.body;
+    try {
+        if (body.state.length>0) {
+            let userModify = await User.findByIdAndUpdate(id, {$set: {state: body.state}}, { new: true });
+            return res.status(200).json({
+                msg: "Estado de residencia modifcado con éxito."
+            });
+        } else {
+            return res.status(500).json({
+                msg: 'Esta vacío el estado de residencia, revise de nuevo.'
+            });
+        }
+    } catch (err) {
+        return res.status(500).json({
+            msg: 'Ha ocurrido un error.'
+        });
+    }
+}
+
+export const updateTown = async (req: Request, res: Response) => {
+    let id = req.userId;
+    let body = req.body;
+    try {
+        if (body.town.length>0) {
+            let userModify = await User.findByIdAndUpdate(id, {$set: {town: body.town}}, { new: true });
+            return res.status(200).json({
+                msg: "Municipio modifcado con éxito."
+            });
+        } else {
+            return res.status(500).json({
+                msg: 'Esta vacío el municipio, revise de nuevo.'
+            });
+        }
+    } catch (err) {
+        return res.status(500).json({
+            msg: 'Ha ocurrido un error.'
+        });
+    }
+}
