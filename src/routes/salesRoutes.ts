@@ -15,7 +15,7 @@ router.get('/sales', [validateJWT], (req: Request, res: Response) => {
                 message: err
             });
         } else {
-            User.populate(salesDoc, { path: "idBuyer" }, function (err, salesDoc) {
+            User.populate(salesDoc, { path: "idSeller" }, function (err, salesDoc) {
                 if (err) {
                     return res.status(404).json({
                         message: err
