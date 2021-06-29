@@ -274,7 +274,7 @@ export const updateAge = async (req: Request, res: Response) => {
         const petResult = await Pet.findById({ _id: petId });
         if (!petResult) {
             return res.status(500).json({
-                msg: 'La mascota no existe.',
+                message: 'La mascota no existe.',
                 petId: petId
             });
         } else {
@@ -282,22 +282,22 @@ export const updateAge = async (req: Request, res: Response) => {
                 if (body.age > 0 && body.age < 100) {
                     let userModify = await Pet.findByIdAndUpdate(petId, { $set: { age: body.age } }, { new: true });
                     return res.status(200).json({
-                        msg: "Edad de mascota modifcada con éxito."
+                        message: "Edad de mascota modifcada con éxito."
                     });
                 } else {
                     return res.status(500).json({
-                        msg: 'Edad igual a 0 o mayor a 100, revise de nuevo.'
+                        message: 'Edad igual a 0 o mayor a 100, revise de nuevo.'
                     });
                 }
             } else {
                 return res.status(500).json({
-                    msg: 'Esta vacía la edad de la mascota, revise de nuevo.'
+                    message: 'Esta vacía la edad de la mascota, revise de nuevo.'
                 });
             }
         }
     } catch (err) {
         return res.status(500).json({
-            msg: 'Ha ocurrido un error.'
+            message: 'Ha ocurrido un error.'
         });
     }
 }
@@ -309,25 +309,25 @@ export const updateName = async (req: Request, res: Response) => {
         const petResult = await Pet.findById({ _id: petId });
         if (!petResult) {
             return res.status(500).json({
-                msg: 'La mascota no existe.',
+                message: 'La mascota no existe.',
                 petId: petId
             });
         } else {
             if (body.name.length > 0) {
                 let userModify = await Pet.findByIdAndUpdate(petId, { $set: { name: body.name } }, { new: true });
                 return res.status(200).json({
-                    msg: "Nombre de mascota modifcado con éxito."
+                    message: "Nombre de mascota modifcado con éxito."
                 });
 
             } else {
                 return res.status(500).json({
-                    msg: 'Esta vacío el nombre de la mascota, revise de nuevo.'
+                    message: 'Esta vacío el nombre de la mascota, revise de nuevo.'
                 });
             }
         }
     } catch (err) {
         return res.status(500).json({
-            msg: 'Ha ocurrido un error.'
+            message: 'Ha ocurrido un error.'
         });
     }
 }
