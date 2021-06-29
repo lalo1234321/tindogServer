@@ -3,6 +3,7 @@ import { ISales } from '../interfaces/ISales';
 import Sales from '../mongoose-models/SalesModel';
 import User from '../mongoose-models/userModel';
 import { validateJWT } from '../middleware/validateJWT';
+import { registerSales } from '../controllers/registerSales';
 
 const router = Router();
 
@@ -55,9 +56,8 @@ router.put('/deleteSales/:saleId', [validateJWT], async (req: Request, res: Resp
     }
 });
 
-router.post('/sales/register', (req: Request, res: Response) => {
-    let idSeller = req.body.id;
-    //recibir un token y extraer la info del usuario
-});
+router.post('/sales/register', registerSales);
+router.get('/sales/confirmation');
+
 
 export default router;
