@@ -21,13 +21,16 @@ let saleSchema = new Schema({
     },
     idBuyer: {
         type: Schema.Types.ObjectId,
-        required: true,
         default: null,
         ref: 'users'
     },
     status: {
         type: String,
         default: "Disponible"
+    },
+    date: {
+        type: Date,
+        required: true
     }
 });
 
