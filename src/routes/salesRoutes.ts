@@ -1,22 +1,20 @@
 import { Router, Request, Response } from 'express';
-import { ISales } from '../interfaces/ISales';
-import Sales from '../mongoose-models/SalesModel';
+import { registerSales } from '../controllers/registerSales';
 
 const router = Router();
 
 //explorar las ventas
-router.get('/sales', (req: Request, res: Response) => {
-    Sales.find({status: "Disponible"},(err, salesDoc) => {
-        if (err) {
-            console.error(err);
-        }
-        console.log("SalesDoc:\n"+salesDoc);
-    });
-});
+// router.get('/sales', (req: Request, res: Response) => {
+//     Sales.find({status: "Disponible"},(err, salesDoc) => {
+//         if (err) {
+//             console.error(err);
+//         }
+//         return res.status(200).json({
+//             sales: salesDoc
+//         });
+//     });
+// });
 
-router.post('/sales/register', (req: Request, res: Response) => {
-    let idSeller = req.body.id;
-    //recibir un token y extraer la info del usuario
-});
+router.post('/sales/register', registerSales);
 
 export default router;
