@@ -48,6 +48,11 @@ const renewToken = async( req: Request, res: Response ) => {
         const userId = req.userId;
         const user = await User.findById( userId );
         const token = await generarJWT( userId );
+        if(!user) {
+            res.status(500).json({
+                message:'token muerto'
+            });
+        }
         res.status(200).json({
             user,
             token
