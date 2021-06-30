@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { acceptPetChat, createAcceptedModel, deletePetNotification, registerPet, retrieveChats, retrieveMessages, retrievePetImage, retrievePetNotifications } from "../controllers/petController";
+import { acceptPetChat, createAcceptedModel, deletePetNotification, registerPet, retrieveChats, retrieveMessages, retrievePetImage, retrievePetNotifications, updateAge, updateName } from "../controllers/petController";
 import { validatePetBodyFields } from "../middleware/validateBodyFields"; 
 import { validatePetFormData, validateUploadedFiles } from "../middleware/validateMediaFields"; 
 import  { validateJWT }  from "../middleware/validateJWT";
@@ -18,5 +18,8 @@ router.post('/pet/createAccepted/:idPet',createAcceptedModel);
 router.put('/pet/accept/:idPet/:petUserName', acceptPetChat);
 router.get('/pet/accept/:idPet',retrieveChats);
 router.get('/pet/messages/:myPetUserName/:otherPetUsarName', retrieveMessages);
+router.put('/updateAge/:petId', [validateJWT],  petAgeValidator, updateAge);
+router.put('/updateName/:petId', [validateJWT], updateName);
+
 
 export default router;
