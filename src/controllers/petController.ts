@@ -326,12 +326,34 @@ export const updateName = async (req: Request, res: Response) => {
                 return res.status(200).json({
                     message: "Nombre de mascota modifcado con éxito"
                 });
-
             } else {
                 return res.status(500).json({
                     message: 'Esta vacío el nombre de la mascota, revise de nuevo'
                 });
             }
+        }
+    } catch (err) {
+        return res.status(500).json({
+            message: 'Ha ocurrido un error'
+        });
+    }
+}
+
+export const deletePet = async (req: Request, res: Response) => {
+    const petId = req.params.petId;
+    let body = req.body;
+    try {
+        const petResult = await Pet.findById({ _id: petId });
+        if (!petResult) {
+            return res.status(500).json({
+                message: 'La mascota no existe',
+                petId: petId
+            });
+        } else {
+            let userModify = await Pet.findByIdAndUpdate(petId, { $set: { isDeleted: true } }, { new: true });
+            return res.status(200).json({
+                message: 'Mascota eliminada con éxito'
+            });
         }
     } catch (err) {
         return res.status(500).json({
