@@ -1,5 +1,6 @@
 import { Document } from "mongoose";
 import { IPet } from "./IPet";
+import { ITerms } from "./ITerms";
 
 export interface IUser extends Document {
     email: string;
@@ -12,7 +13,7 @@ export interface IUser extends Document {
     emailConfirmed:boolean;
     premium: boolean;
     datePlan: Date[],
-    isOnline: boolean
+    isOnline: boolean;
 }
 
 export default IUser;

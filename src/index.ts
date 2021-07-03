@@ -14,6 +14,7 @@ import petRoutes from "./routes/petRoutes";
 import login from './routes/auth';
 import deleteUser from './routes/DeleteUser';
 import sales from './routes/salesRoutes';
+import terms from './routes/termsRoutes';
 
 app.use(morgan('dev'));
 app.use(cors());
@@ -24,6 +25,7 @@ app.use(petRoutes);
 app.use(login);
 app.use(express.static('public'));
 app.use(sales);
+app.use(terms);
 
 app.use(deleteUser);
 

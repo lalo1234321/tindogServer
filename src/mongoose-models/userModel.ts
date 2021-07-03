@@ -1,8 +1,8 @@
-import { Model, Schema, model }  from 'mongoose'; 
+import { Model, Schema, model } from 'mongoose';
 import { IUser } from "../interfaces/IUser";
 
 let account = {
-    values:['STANDARD','PREMIUM'],
+    values: ['STANDARD', 'PREMIUM'],
     message: '${VALUE} no es tipo de cuenta válido'
 };
 
@@ -62,17 +62,17 @@ let userScheme = new Schema({
         type: Boolean,
         default: false
     },
-    datePlan:[{
+    datePlan: [{
         type: Date,
         default: null
     }],
-    ownedPets:[{
+    ownedPets: [{
         type: Schema.Types.ObjectId,
-       ref: 'pets'     
+        ref: 'pets'
     }]
 },
-    {timestamps: true}
+    { timestamps: true }
 );
 
-const User: Model<IUser> = model('users',userScheme);
-export default  User;
+const User: Model<IUser> = model('users', userScheme);
+export default User;

@@ -40,21 +40,21 @@ export const registerUser = async (req: Request, res: Response) => {
                     }
                 );
                 res.status(200).json({
-                    message: "Usuario guardado correctamente"
+                    message: 'Usuario guardado correctamente'
                 });
             } else {
                 return res.status(400).json({
-                    message: "Edad menor a 18"
+                    message: 'Edad menor a 18'
                 });
             }
             } else {
                 return res.status(404).json({
-                    message: "Email de usuario existente"
+                    message: 'Email de usuario existente'
                 });
             }
         } else {
             return res.status(404).json({
-                message: "Nombre de usuario existente"
+                message: 'Nombre de usuario existente'
             });
         }
     } catch (err) {
@@ -75,7 +75,7 @@ export const getAllPetsOwnedByUser = (req: Request, res: Response) => {
             userDoc
         )
     })
-};
+}
 
 export const updatePassword = async (req: Request, res: Response) => {
     let id = req.userId;
@@ -87,7 +87,7 @@ export const updatePassword = async (req: Request, res: Response) => {
         if (body.password.length > 0) {
             let userModify = await User.findByIdAndUpdate(id, { $set: { password: body.password } }, { new: true });
             return res.status(200).json({
-                message: "Contraseña modifcada con éxito"
+                message: 'Contraseña modifcada con éxito'
             });
         } else {
             return res.status(500).json({
@@ -108,7 +108,7 @@ export const updateState = async (req: Request, res: Response) => {
         if (body.state.length > 0) {
             let userModify = await User.findByIdAndUpdate(id, { $set: { state: body.state } }, { new: true });
             return res.status(200).json({
-                message: "Estado de residencia modifcado con éxito"
+                message: 'Estado de residencia modifcado con éxito'
             });
         } else {
             return res.status(500).json({
@@ -129,7 +129,7 @@ export const updateTown = async (req: Request, res: Response) => {
         if (body.town.length > 0) {
             let userModify = await User.findByIdAndUpdate(id, { $set: { town: body.town } }, { new: true });
             return res.status(200).json({
-                message: "Municipio modifcado con éxito"
+                message: 'Municipio modifcado con éxito'
             });
         } else {
             return res.status(500).json({
