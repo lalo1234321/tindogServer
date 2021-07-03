@@ -1,21 +1,21 @@
 import { Request, Response } from 'express';
-import User from '../mongoose-models/userModel'; 
+import User from '../mongoose-models/userModel';
 import * as bcrypt from 'bcrypt';
 import { IUser } from "../interfaces/IUser";
 const { generarJWT } = require('../utils/jwt');
 
-const login = async(req: Request, res: Response) => {
+const login = async (req: Request, res: Response) => {
     let passwordBody = req.body.password;
     console.log("se está ejecutando");
     // para obtener el valor de un query si es que no implementamos una interfaz en nuestros modelos
     //  de mongodb
     // let password2 = query.get('password');
-    
+
     try {
-        const user:IUser = await User.findOne({email: req.body.email});
-        if( !user ) {
+        const user: IUser = await User.findOne({ email: req.body.email, isDeleted: false });
+        if (!user) {
             return res.status(400).json({
-                message:"Usuario no encontrado"
+                message: "Usuario no encontrado"
             });
         }
         if (!user.emailConfirmed) {
@@ -24,35 +24,35 @@ const login = async(req: Request, res: Response) => {
             });
         }
         const validPassword = await bcrypt.compare(passwordBody, user.password);
-        if( !validPassword ) {
+        if (!validPassword) {
             return res.status(400).json({
-                message:'Las credenciales no coinciden'
+                message: 'Las credenciales no coinciden'
             });
         }
-        const token = await generarJWT( user._id );
+        const token = await generarJWT(user._id);
         res.status(200).json({
             user,
             token
         });
 
-    } catch( err ) {
+    } catch (err) {
         return res.status(500).json({
-            message:'Ocurrió un error, hable con el administrador!'
+            message: 'Ocurrió un error, hable con el administrador!'
         });
     }
 
 }
 
-const renewToken = async( req: Request, res: Response ) => {
-    try{
+const renewToken = async (req: Request, res: Response) => {
+    try {
         const userId = req.userId;
-        const user = await User.findById( userId );
-        const token = await generarJWT( userId );
+        const user = await User.findById(userId);
+        const token = await generarJWT(userId);
         res.status(200).json({
             user,
             token
         });
-    }catch( err ) {
+    } catch (err) {
         res.status(500).json({
             messsage: "Error en el servidor"
         });

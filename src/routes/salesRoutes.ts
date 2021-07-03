@@ -1,8 +1,4 @@
 import { Router, Request, Response } from 'express';
-import { ISales } from '../interfaces/ISales';
-import Sales from '../mongoose-models/SalesModel';
-import User from '../mongoose-models/userModel';
-import Pet from "../mongoose-models/petModel";
 import { validateJWT } from '../middleware/validateJWT';
 import { registerSales, getAllSales, deleteSales, makePurchase} from '../controllers/registerSales';
 
