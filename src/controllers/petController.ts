@@ -343,8 +343,8 @@ export const deletePet = async (req: Request, res: Response) => {
     const petId = req.params.petId;
     let body = req.body;
     try {
-        const petResult = await Pet.findById({ _id: petId });
-        if (!petResult) {
+        const petResult = await Pet.find({ _id: petId, isDeleted: false });
+        if (petResult.length == 0) {
             return res.status(500).json({
                 message: 'La mascota no existe',
                 petId: petId
