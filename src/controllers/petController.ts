@@ -85,57 +85,87 @@ export const registerPet = async (req: Request, res: Response) => {
 }
 
 export const updateProfileImage = async (req:Request, res:Response) => {
-    const petId = req.params.petId;
+    let petId = req.params.petId;
     let file: IFile;
     try {
-        //let rawFile = req.files[0];
-        //console.log(rawFile);
-        //file = fileOps.rearrangeFileStructure(rawFile);
-
-        //  req.files['avatar'][0] -> File
         file = req.file;
         
+        let pet = await Pet.findById(petId);
+        if (!pet) {
+            return res.status(400).json({
+                message: "Mascota no encontrada"
+            });
+        }
+        let path = "";
+        path = pet.profileImagePhysicalPath.valueOf();
+        fs.unlink(path,(err) => {
+            console.log(err);
+        });
+        // res.status(200).json({
+        //     message: pet
+        // });
         
         if (!file) {
-            
             res.status(400).json({
                 message: 'No se pudo subir la imagen' 
             });
         } else {
-            console.log(`originalName: ${file.originalname}`);
-            console.log(file.filename);
-            console.log(`pathname: ${file.path}`);
+            file.dirStorageOption = `../../public/profileImage/`;
             let extension = file.originalname.split('.')[file.originalname.split('.').length-1];
-            console.log(extension);
-
-
+            let filePath = fileOps.writeFile(file,`${petId}.${extension}`);
+            console.log(filePath);
+            pet.profileImageURI = generateURI_forFile(filePath);
+            await pet.save();
             res.status(200).json({
-                message: 'Imagen subida'
+                message: 'Imagen subida',
+                pet
             });
         }
             
-        // const pet = await Pet.findById(petId);
-        // console.log('despues de la mascota');
-        // let path = "";
-        // path = pet.profileImagePhysicalPath.valueOf();
-        // console.log(path);
-        // fs.unlinkSync(path);
-        //for(let index in req.files){
-            //let rawFile = req.files[`${index}`];
-            //console.log('hay por lo menos un file en la peticion');
-        //}
-        // res.status(200).json({
-        //     message: pet
-        // });
+        
     }catch ( err ) {
         res.status(400).json({
             message: "Error en la petición" 
         });
     }
-    
-    
+}
 
-
+export const updateMedicalCertificate = async (req:Request, res:Response) => {
+    const petId = req.params.petId;
+    let file: IFile;
+    try {
+        file = req.file;
+        
+        const pet = await Pet.findById(petId);
+        if (!pet) {
+            return res.status(400).json({
+                message: "Mascota no encontrada"
+            });
+        }
+        let path = "";
+        path = pet.medicalCertificateImagePhysicalPath.valueOf();
+        fs.unlinkSync(path);     
+        if (!file) {
+            res.status(400).json({
+                message: 'No se pudo subir la imagen' 
+            });
+        } else {
+            file.dirStorageOption = `../../public/medicalCertificateImage/`;
+            let extension = file.originalname.split('.')[file.originalname.split('.').length-1];
+            let filePath = fileOps.writeFile(file,`${petId}.${extension}`);
+            console.log(filePath);
+            pet.profileImageURI = generateURI_forFile(filePath);
+            await pet.save();
+            res.status(200).json({
+                message: 'Imagen subida',
+                pet
+            });
+        }
+    }catch ( err ) {
+        res.status(400).json({
+            message: "Error en la petición" 
+        });
+    }
 }
 
 export const retrievePetImage = async (req: Request, res: Response) => {
