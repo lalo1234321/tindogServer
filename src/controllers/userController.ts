@@ -65,18 +65,18 @@ export const registerUser = async (req: Request, res: Response) => {
 }
 
 export const getAllPetsOwnedByUser = (req: Request, res: Response) => {
-    let query = User.find({ _id: req.userId }).populate('ownedPets')
-    query.select('ownedPets').exec((err, userDoc) => {
-        if (err)
-            return res.status(404).json({
-                message: err
-            })
-        res.json(
-            userDoc
-        )
-    })
+    // let query = User.find({ _id: req.userId }).populate('ownedPets')
+    // query.select('ownedPets').exec((err, userDoc) => {
+    //     if (err)
+    //         return res.status(404).json({
+    //             message: err
+    //         })
+    //     res.json(
+    //         userDoc
+    //     )
+    // })
 
-    /*Pet.find({ owner: req.userId, isDeleted: false }, (err, petDoc) => {
+    Pet.find({ owner: req.userId, isDeleted: false }, (err, petDoc) => {
         if (err) {
             return res.status(404).json({
                 message: err
@@ -86,7 +86,7 @@ export const getAllPetsOwnedByUser = (req: Request, res: Response) => {
                 ownedPets: petDoc
             }]);
         }
-    });*/
+    });
 }
 
 export const updatePassword = async (req: Request, res: Response) => {

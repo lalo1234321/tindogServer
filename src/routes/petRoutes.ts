@@ -1,11 +1,27 @@
 import { Router, Request, Response } from 'express';
-import { acceptPetChat, createAcceptedModel, deletePetNotification, registerPet, retrieveChats, retrieveMessages, retrievePetImage, retrievePetNotifications, updateAge, updateName, deletePet } from "../controllers/petController";
+import { acceptPetChat, createAcceptedModel, deletePetNotification, registerPet, 
+    retrieveChats, retrieveMessages, retrievePetImage, retrievePetNotifications, 
+    updateAge, updateName, deletePet, updateProfileImage } from "../controllers/petController";
 import { validatePetBodyFields } from "../middleware/validateBodyFields";
 import { validatePetFormData, validateUploadedFiles } from "../middleware/validateMediaFields";
 import { validateJWT } from "../middleware/validateJWT";
 import { validateOwner } from '../middleware/validateOwner';
 import { match } from '../controllers/match'
 import { petAgeValidator } from '../middleware/customChecks/customUserChecks';
+import * as path from 'path';
+import multer from "multer";
+
+//Config Storage Engine
+const storage: multer.StorageEngine = multer.memoryStorage();
+
+const upload = multer({
+    storage: storage,
+    dest: path.join(__dirname, '../../serverStorage')
+})
+
+// import * as multer from 'multer';
+
+// const upload = multer({ dest: '../public/' });
 
 
 const router = Router();
@@ -21,6 +37,7 @@ router.get('/pet/messages/:myPetUserName/:otherPetUsarName', retrieveMessages);
 router.put('/updateAge/:petId', [validateJWT], petAgeValidator, updateAge);
 router.put('/updateName/:petId', [validateJWT], updateName);
 router.put('/deletePet/:petId', [validateJWT], deletePet);
+router.put('/pet/update/profilePicture/:petId', validateJWT, upload.single('hola'),updateProfileImage);
 
 
 export default router;

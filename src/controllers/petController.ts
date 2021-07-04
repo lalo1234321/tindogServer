@@ -11,6 +11,7 @@ import { IAcceptedPets } from '../interfaces/IAcceptedPets';
 import { IPet } from '../interfaces/IPet';
 import Message from '../mongoose-models/messageModel';
 const fileOps = new MulterFileOps();
+import * as fs from 'fs';
 
 export const registerPet = async (req: Request, res: Response) => {
     let body = req.body;
@@ -30,7 +31,7 @@ export const registerPet = async (req: Request, res: Response) => {
             for (let key in req.files) {
                 let rawFile = req.files[`${key}`];
                 file = fileOps.rearrangeFileStructure(rawFile);
-                let extension = file.originalname.split('.')[1];
+                let extension = file.originalname.split('.')[file.originalname.split('.').length-1];
                 let newFileName = `${petId}.${extension}`;
                 let filePath = fileOps.writeFile(file, newFileName);
                 listOfFilePaths[`${key}`] = filePath;
@@ -81,6 +82,60 @@ export const registerPet = async (req: Request, res: Response) => {
             message: "Nombre de usuario existente"
         });
     }
+}
+
+export const updateProfileImage = async (req:Request, res:Response) => {
+    const petId = req.params.petId;
+    let file: IFile;
+    try {
+        //let rawFile = req.files[0];
+        //console.log(rawFile);
+        //file = fileOps.rearrangeFileStructure(rawFile);
+
+        //  req.files['avatar'][0] -> File
+        file = req.file;
+        
+        
+        if (!file) {
+            
+            res.status(400).json({
+                message: 'No se pudo subir la imagen' 
+            });
+        } else {
+            console.log(`originalName: ${file.originalname}`);
+            console.log(file.filename);
+            console.log(`pathname: ${file.path}`);
+            let extension = file.originalname.split('.')[file.originalname.split('.').length-1];
+            console.log(extension);
+
+
+            res.status(200).json({
+                message: 'Imagen subida'
+            });
+        }
+            
+        // const pet = await Pet.findById(petId);
+        // console.log('despues de la mascota');
+        // let path = "";
+        // path = pet.profileImagePhysicalPath.valueOf();
+        // console.log(path);
+        // fs.unlinkSync(path);
+        //for(let index in req.files){
+            //let rawFile = req.files[`${index}`];
+            //console.log('hay por lo menos un file en la peticion');
+        //}
+        // res.status(200).json({
+        //     message: pet
+        // });
+    }catch ( err ) {
+        res.status(400).json({
+            message: "Error en la petición" 
+        });
+    }
+    
+    
+
+
 }
 
 export const retrievePetImage = async (req: Request, res: Response) => {
