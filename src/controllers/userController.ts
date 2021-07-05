@@ -4,6 +4,7 @@ import User from '../mongoose-models/userModel';
 import Pet from "../mongoose-models/petModel";
 import { KindOfImage } from '../interfaces/IFile';
 const { sendEmail } = require('../utils/sendEmail');
+import { IUser } from "../interfaces/IUser";
 
 const jwt = require('jsonwebtoken');
 
@@ -64,7 +65,7 @@ export const registerUser = async (req: Request, res: Response) => {
     }
 }
 
-export const getAllPetsOwnedByUser = async(req: Request, res: Response) => {
+export const getAllPetsOwnedByUser = async (req: Request, res: Response) => {
     // let query = User.find({ _id: req.userId }).populate('ownedPets')
     // query.select('ownedPets').exec((err, userDoc) => {
     //     if (err)
@@ -87,6 +88,29 @@ export const getAllPetsOwnedByUser = async(req: Request, res: Response) => {
             }]);
         }
     });
+}
+
+export const getAuxLastConnection = async (req: Request, res: Response) => {
+    let id = req.userId;
+    const user: IUser = await User.findById(id);
+    if (!user) {
+        return res.status(400).json({
+            message: 'El usuario no existe',
+            userId: id
+        });
+    } else {
+        if (user.auxLastConnection == null && user.deviceInformation == null) {
+            return res.status(400).json({
+                message: 'Es la primera vez que inicias sesión por lo cúal aún no hay ningún registro'
+            });
+        } else {
+            console.log("Última conexión: " + user.auxLastConnection)
+            return res.status(200).json({
+                auxLastConnection: user.auxLastConnection,
+                deviceInformation: user.deviceInformation
+            });
+        }
+    }
 }
 
 export const updatePassword = async (req: Request, res: Response) => {
