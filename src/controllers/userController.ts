@@ -5,11 +5,10 @@ import Pet from "../mongoose-models/petModel";
 import { KindOfImage } from '../interfaces/IFile';
 const { sendEmail } = require('../utils/sendEmail');
 import { IUser } from "../interfaces/IUser";
-import { deviceDetect, isBrowser} from 'mobile-device-detect';
+import DeviceDetector = require("device-detector-js");
 
 const jwt = require('jsonwebtoken');
-//const DeviceDetector = require('node-device-detector');
-//const MobileDetect = require('mobile-detect');
+const MobileDetect = require('mobile-detect');
 
 export const registerUser = async (req: Request, res: Response) => {
     let body = req.body;
@@ -96,11 +95,11 @@ export const getAllPetsOwnedByUser = async (req: Request, res: Response) => {
 export const getAuxLastConnection = async (req: Request, res: Response) => {
     let id = req.userId;
 
-    //const md = new MobileDetect(req.headers['user-agent']);
-    //console.log(md);
-
-    console.log(deviceDetect());
-    console.log(isBrowser)
+    const deviceDetector = new DeviceDetector();
+    const userAgent = new MobileDetect(req.headers['user-agent']);
+    console.log(userAgent.ua);
+    const device=deviceDetector.parse(userAgent);
+    console.log(device);
 
     const user: IUser = await User.findById(id);
     if (!user) {
