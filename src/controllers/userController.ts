@@ -19,34 +19,34 @@ export const registerUser = async (req: Request, res: Response) => {
         if (userNameResult.length == 0) {
             const emailResult = await User.find({ email: email });
             if (emailResult.length == 0) {
-                if(body.age>=18){
-                const user = new User(body);
-                await user.save();
-                jwt.sign({ id: user._id }, process.env.JWT_KEY, { expiresIn: '48h' },
-                    (err, token) => {
-                        if (err) {
-                            return res.status(400).json({
-                                message: err
-                            });
+                if (body.age >= 18) {
+                    const user = new User(body);
+                    await user.save();
+                    jwt.sign({ id: user._id }, process.env.JWT_KEY, { expiresIn: '48h' },
+                        (err, token) => {
+                            if (err) {
+                                return res.status(400).json({
+                                    message: err
+                                });
+                            }
+                            console.log(`token: ${token}`);
+                            try {
+                                sendEmail(req.body.email, token);
+                            } catch (err) {
+                                return res.status(500).json({
+                                    message: err
+                                });
+                            }
                         }
-                        console.log(`token: ${token}`);
-                        try {
-                            sendEmail(req.body.email, token);
-                        } catch (err) {
-                            return res.status(500).json({
-                                message: err
-                            });
-                        }
-                    }
-                );
-                res.status(200).json({
-                    message: 'Usuario guardado correctamente'
-                });
-            } else {
-                return res.status(400).json({
-                    message: 'Edad menor a 18'
-                });
-            }
+                    );
+                    res.status(200).json({
+                        message: 'Usuario guardado correctamente'
+                    });
+                } else {
+                    return res.status(400).json({
+                        message: 'Edad menor a 18'
+                    });
+                }
             } else {
                 return res.status(404).json({
                     message: 'Email de usuario existente'
@@ -64,17 +64,29 @@ export const registerUser = async (req: Request, res: Response) => {
     }
 }
 
-export const getAllPetsOwnedByUser = (req: Request, res: Response) => {
-    let query = User.find({ _id: req.userId }).populate('ownedPets')
-    query.select('ownedPets').exec((err, userDoc) => {
-        if (err)
+export const getAllPetsOwnedByUser = async(req: Request, res: Response) => {
+    // let query = User.find({ _id: req.userId }).populate('ownedPets')
+    // query.select('ownedPets').exec((err, userDoc) => {
+    //     if (err)
+    //         return res.status(404).json({
+    //             message: err
+    //         })
+    //     res.json(
+    //         userDoc
+    //     )
+    // })
+
+    await Pet.find({ owner: req.userId, isDeleted: false }, (err, petDoc) => {
+        if (err) {
             return res.status(404).json({
                 message: err
-            })
-        res.json(
-            userDoc
-        )
-    })
+            });
+        } else {
+            return res.status(200).json([{
+                ownedPets: petDoc
+            }]);
+        }
+    });
 }
 
 export const updatePassword = async (req: Request, res: Response) => {

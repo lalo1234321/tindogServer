@@ -12,7 +12,7 @@ export interface IUser extends Document {
     ownedPets: Array<IPet>;
     emailConfirmed:boolean;
     premium: boolean;
-    datePlan: Date[],
+    datePlan: Date[];
     isOnline: boolean;
 }
 

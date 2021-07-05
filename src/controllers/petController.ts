@@ -11,7 +11,8 @@ import { IAcceptedPets } from '../interfaces/IAcceptedPets';
 import { IPet } from '../interfaces/IPet';
 import Message from '../mongoose-models/messageModel';
 const fileOps = new MulterFileOps();
-
+import * as fs from 'fs';
+//changes for commit 
 export const registerPet = async (req: Request, res: Response) => {
     let body = req.body;
     let username = body.username;
@@ -30,7 +31,7 @@ export const registerPet = async (req: Request, res: Response) => {
             for (let key in req.files) {
                 let rawFile = req.files[`${key}`];
                 file = fileOps.rearrangeFileStructure(rawFile);
-                let extension = file.originalname.split('.')[1];
+                let extension = file.originalname.split('.')[file.originalname.split('.').length-1];
                 let newFileName = `${petId}.${extension}`;
                 let filePath = fileOps.writeFile(file, newFileName);
                 listOfFilePaths[`${key}`] = filePath;
@@ -79,6 +80,90 @@ export const registerPet = async (req: Request, res: Response) => {
     } else {
         return res.status(404).json({
             message: "Nombre de usuario existente"
+        });
+    }
+}
+
+export const updateProfileImage = async (req:Request, res:Response) => {
+    let petId = req.params.petId;
+    let file: IFile;
+    try {
+        file = req.file;
+        
+        let pet = await Pet.findById(petId);
+        if (!pet) {
+            return res.status(400).json({
+                message: "Mascota no encontrada"
+            });
+        }
+        let path = "";
+        path = pet.profileImagePhysicalPath.valueOf();
+        fs.unlink(path,(err) => {
+            console.log(err);
+        });
+        // res.status(200).json({
+        //     message: pet
+        // });
+        
+        if (!file) {
+            res.status(400).json({
+                message: 'No se pudo subir la imagen' 
+            });
+        } else {
+            file.dirStorageOption = `../../public/profileImage/`;
+            let extension = file.originalname.split('.')[file.originalname.split('.').length-1];
+            let filePath = fileOps.writeFile(file,`${petId}.${extension}`);
+            console.log(filePath);
+            pet.profileImageURI = generateURI_forFile(filePath);
+            await pet.save();
+            res.status(200).json({
+                message: 'Imagen subida',
+                pet
+            });
+        }
+            
+        
+    }catch ( err ) {
+        res.status(400).json({
+            message: "Error en la petición" 
+        });
+    }
+}
+
+export const updateMedicalCertificate = async (req:Request, res:Response) => {
+    const petId = req.params.petId;
+    let file: IFile;
+    try {
+        file = req.file;
+        
+        const pet = await Pet.findById(petId);
+        if (!pet) {
+            return res.status(400).json({
+                message: "Mascota no encontrada"
+            });
+        }
+        let path = "";
+        path = pet.medicalCertificateImagePhysicalPath.valueOf();
+        fs.unlinkSync(path);     
+        if (!file) {
+            res.status(400).json({
+                message: 'No se pudo subir la imagen' 
+            });
+        } else {
+            file.dirStorageOption = `../../public/medicalCertificateImage/`;
+            let extension = file.originalname.split('.')[file.originalname.split('.').length-1];
+            let filePath = fileOps.writeFile(file,`${petId}.${extension}`);
+            console.log(filePath);
+            pet.profileImageURI = generateURI_forFile(filePath);
+            await pet.save();
+            res.status(200).json({
+                message: 'Imagen subida',
+                pet
+            });
+        }
+    }catch ( err ) {
+        res.status(400).json({
+            message: "Error en la petición" 
         });
     }
 }
@@ -326,12 +411,34 @@ export const updateName = async (req: Request, res: Response) => {
                 return res.status(200).json({
                     message: "Nombre de mascota modifcado con éxito"
                 });
-
             } else {
                 return res.status(500).json({
                     message: 'Esta vacío el nombre de la mascota, revise de nuevo'
                 });
             }
+        }
+    } catch (err) {
+        return res.status(500).json({
+            message: 'Ha ocurrido un error'
+        });
+    }
+}
+
+export const deletePet = async (req: Request, res: Response) => {
+    const petId = req.params.petId;
+    let body = req.body;
+    try {
+        const petResult = await Pet.find({ _id: petId, isDeleted: false });
+        if (petResult.length == 0) {
+            return res.status(500).json({
+                message: 'La mascota no existe',
+                petId: petId
+            });
+        } else {
+            let userModify = await Pet.findByIdAndUpdate(petId, { $set: { isDeleted: true } }, { new: true });
+            return res.status(200).json({
+                message: 'Mascota eliminada con éxito'
+            });
         }
     } catch (err) {
         return res.status(500).json({
