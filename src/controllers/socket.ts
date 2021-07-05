@@ -2,7 +2,7 @@ import User from '../mongoose-models/userModel';
 import { IUser } from "../interfaces/IUser";
 import Notification from '../mongoose-models/notificationModel';
 import Message from '../mongoose-models/messageModel';
-import { isMobile, isMobileOnly, osName, deviceType, mobileModel, osVersion, browserName, isBrowser } from 'mobile-device-detect';
+import { isMobile, isMobileOnly, osName, deviceType, mobileModel, osVersion, browserName, deviceDetect, isBrowser} from 'mobile-device-detect';
 
 const userOnline = async (uid = '') => {
     //console.log(uid);
@@ -12,10 +12,12 @@ const userOnline = async (uid = '') => {
     return user;
 }
 
-const userOffline = async (uid = '') => {
+const userOffline = async (uid = '') => {    
     const user: IUser = await User.findById(uid);
     user.isOnline = false;
     user.auxLastConnection = new Date();
+    console.log(deviceDetect());
+    console.log(isBrowser);
     if (isMobile == true || isMobileOnly == true) {
         user.deviceInformation = "S.O. " + osName + " versión: " + osVersion + " en " + deviceType + " modelo: " + mobileModel;
     } else {
