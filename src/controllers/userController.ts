@@ -79,6 +79,12 @@ export const getAllPetsOwnedByUser = async (req: Request, res: Response) => {
     //     )
     // })
 
+    const deviceDetector = new DeviceDetector();
+    const userAgent = new MobileDetect(req.headers['user-agent']);
+    console.log(userAgent.ua);
+    const device=deviceDetector.parse(userAgent);
+    console.log(device);
+
     await Pet.find({ owner: req.userId, isDeleted: false }, (err, petDoc) => {
         if (err) {
             return res.status(404).json({

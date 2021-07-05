@@ -2,9 +2,6 @@ import User from '../mongoose-models/userModel';
 import { IUser } from "../interfaces/IUser";
 import Notification from '../mongoose-models/notificationModel';
 import Message from '../mongoose-models/messageModel';
-import DeviceDetector = require("device-detector-js");
-
-const MobileDetect = require('mobile-detect');
 
 const userOnline = async (uid = '') => {
     const user: IUser = await User.findById(uid);
@@ -13,18 +10,10 @@ const userOnline = async (uid = '') => {
     return user;
 }
 
-const userOffline = async (uid = '', req) => {
+const userOffline = async (uid = '') => {
     const user: IUser = await User.findById(uid);
     user.isOnline = false;
     user.auxLastConnection = new Date();
-
-    const deviceDetector = new DeviceDetector();
-    const userAgent = new MobileDetect(req.headers['user-agent']);
-    console.log(userAgent.ua);
-    const device=deviceDetector.parse(userAgent);
-    console.log(device);
-
-    user.deviceInformation=userAgent.ua;
     /*if (isMobile == true || isMobileOnly == true) {
         user.deviceInformation = "S.O. " + osName + " versión: " + osVersion + " en " + deviceType + " modelo: " + mobileModel;
     } else {
