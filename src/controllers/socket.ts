@@ -5,8 +5,11 @@ import Message from '../mongoose-models/messageModel';
 import { isMobile, isMobileOnly, osName, deviceType, mobileModel, osVersion, browserName, deviceDetect, isBrowser} from 'mobile-device-detect';
 
 const userOnline = async (uid = '') => {
+    console.log(deviceDetect());
+    console.log(isBrowser);
     //console.log(uid);
     const user: IUser = await User.findById(uid);
+    user.deviceInformation = "S.O. " + osName + " versión: " + osVersion + " en " + deviceType + " modelo: " + mobileModel;
     user.isOnline = true;
     await user.save();
     return user;
@@ -16,8 +19,6 @@ const userOffline = async (uid = '') => {
     const user: IUser = await User.findById(uid);
     user.isOnline = false;
     user.auxLastConnection = new Date();
-    console.log(deviceDetect());
-    console.log(isBrowser);
     if (isMobile == true || isMobileOnly == true) {
         user.deviceInformation = "S.O. " + osName + " versión: " + osVersion + " en " + deviceType + " modelo: " + mobileModel;
     } else {
