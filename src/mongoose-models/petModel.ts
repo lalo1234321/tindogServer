@@ -56,7 +56,11 @@ let petScheme = new Schema({
     meetingsNumber: {
         type: Number,
         default: 0
-    }
+    },
+    previousMeetings: [{
+        type: Schema.Types.ObjectId,
+        ref: 'pets'
+    }]
 },
     {timestamps: true});
 

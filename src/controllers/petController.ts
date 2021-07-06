@@ -458,6 +458,7 @@ export const deletePet = async (req: Request, res: Response) => {
 
 export const petValoration = (req: Request, res: Response) => {
     const token = req.headers.token;
+    const petId = req.body.petId;
     if (!token) {
         return res.status(400).json({
             message: "Token no introducido"
@@ -465,22 +466,26 @@ export const petValoration = (req: Request, res: Response) => {
     }
     try {
         const decoded = jwt.verify(token, process.env.JWT_KEY);
-        console.log(decoded);
         let userId = decoded.uid;
-        console.log(userId);
         let petUsername = req.body.username;
         let stars = req.body.stars;
         if (stars >= 1 && stars <= 5) {
-            Pet.findOne({ username: petUsername }, (err, pet) => {
+            Pet.findOne({ username: petUsername, previousMeetings: {$ne: petId}}, 
+                (err, pet) => {
                 if (err) {
                     return res.status(400).json({
                         message: "Error encontrando mascota",
                     });
                 }
-                console.log(pet.owner);
+                if (!pet) {
+                    return res.status(400).json({
+                        message: "Valoracion ya realizada"
+                    });
+                }
                 if (userId != pet.owner) {
                     pet.stars = pet.stars + stars;
                     pet.meetingsNumber++;
+                    pet.previousMeetings.push(petId);
                     pet.save();
                     return res.status(200).json({
                         message: "Guardado correctamente",

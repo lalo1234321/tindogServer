@@ -16,4 +16,5 @@ export interface IPet extends Document<any, {}> {
     owner: Types.ObjectId;
     stars: Number;
     meetingsNumber: Number;
+    previousMeetings: Array<Types.ObjectId>;
 }
