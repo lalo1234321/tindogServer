@@ -2,18 +2,17 @@ import { Request, Response } from "express";
 import IFile, { KindOfImage } from "../interfaces/IFile";
 import Pet from "../mongoose-models/petModel";
 import { MulterFileOps } from "../utils/MulterFileOps";
-import { Types } from "mongoose";
-import User from "../mongoose-models/userModel";
-import { generateURI_forFile } from "../utils/generateURI";
-import Notification from "../mongoose-models/notificationModel";
-import AcceptedPets from "../mongoose-models/acceptedPetsModel";
-import { IAcceptedPets } from "../interfaces/IAcceptedPets";
-import { IPet } from "../interfaces/IPet";
-import Message from "../mongoose-models/messageModel";
-const fileOps = new MulterFileOps();
-import * as fs from "fs";
-const jwt = require('jsonwebtoken');
-//changes for commit
+import { Types } from 'mongoose';
+import User from '../mongoose-models/userModel';
+import { generateURI_forFile } from '../utils/generateURI';
+import Notification from '../mongoose-models/notificationModel';
+import AcceptedPets from '../mongoose-models/acceptedPetsModel';
+import { IAcceptedPets } from '../interfaces/IAcceptedPets';
+import { IPet } from '../interfaces/IPet';
+import Message from '../mongoose-models/messageModel';
+let fileOps = new MulterFileOps();
+import * as fs from 'fs';
+//changes for commit 
 export const registerPet = async (req: Request, res: Response) => {
     let body = req.body;
     let username = body.username;
@@ -137,13 +136,13 @@ export const updateProfileImage = async (req: Request, res: Response) => {
     }
 };
 
-export const updateMedicalCertificate = async (req: Request, res: Response) => {
-    const petId = req.params.petId;
+export const updateMedicalCertificate = async (req:Request, res:Response) => {
+    let petId = req.params.petId;
     let file: IFile;
     try {
         file = req.file;
-
-        const pet = await Pet.findById(petId);
+        
+        let pet = await Pet.findById(petId);
         if (!pet) {
             return res.status(400).json({
                 message: "Mascota no encontrada",
@@ -157,12 +156,13 @@ export const updateMedicalCertificate = async (req: Request, res: Response) => {
                 message: "No se pudo subir la imagen",
             });
         } else {
+            //medicalCertificateImage
             file.dirStorageOption = `../../public/medicalCertificateImage/`;
             let extension =
                 file.originalname.split(".")[file.originalname.split(".").length - 1];
             let filePath = fileOps.writeFile(file, `${petId}.${extension}`);
             console.log(filePath);
-            pet.profileImageURI = generateURI_forFile(filePath);
+            pet.medicalCertificateImageURI = generateURI_forFile(filePath);
             await pet.save();
             res.status(200).json({
                 message: "Imagen subida",
