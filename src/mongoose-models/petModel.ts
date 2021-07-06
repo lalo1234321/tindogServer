@@ -48,7 +48,19 @@ let petScheme = new Schema({
     owner: {
         type: Schema.Types.ObjectId,
         ref: 'users' 
-    }//TODO gender
+    },
+    stars: {
+        type: Number,
+        default: 0
+    },
+    meetingsNumber: {
+        type: Number,
+        default: 0
+    },
+    previousMeetings: [{
+        type: Schema.Types.ObjectId,
+        ref: 'pets'
+    }]
 },
     {timestamps: true});
 
