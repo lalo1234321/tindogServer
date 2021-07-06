@@ -69,7 +69,15 @@ let userScheme = new Schema({
     ownedPets: [{
         type: Schema.Types.ObjectId,
         ref: 'pets'
-    }]
+    }],
+    auxLastConnection: {
+        type: Date,
+        default: null
+    },
+    deviceInformation: {
+        type: String,
+        default: null
+    }
 },
     { timestamps: true }
 );

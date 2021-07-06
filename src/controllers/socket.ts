@@ -11,8 +11,6 @@ const userOnline = async( uid = '' ) => {
     return user;
 }
 
-
-
 const userOffline = async( uid = '' ) => {
     const user:IUser = await User.findById(uid);
     user.isOnline = false;

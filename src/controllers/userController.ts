@@ -4,6 +4,7 @@ import User from '../mongoose-models/userModel';
 import Pet from "../mongoose-models/petModel";
 import { KindOfImage } from '../interfaces/IFile';
 const { sendEmail } = require('../utils/sendEmail');
+import { IUser } from "../interfaces/IUser";
 
 const jwt = require('jsonwebtoken');
 
@@ -87,6 +88,63 @@ export const getAllPetsOwnedByUser = async(req: Request, res: Response) => {
             }]);
         }
     });
+}
+
+export const getInformationConnection = async (req: Request, res: Response) => {
+    let id = req.userId;
+    const user: IUser = await User.findById(id);
+    if (!user) {
+        return res.status(400).json({
+            message: 'El usuario no existe',
+            userId: id
+        });
+    } else {
+        if (user.auxLastConnection == null && user.auxLastConnection == null) {
+            return res.status(400).json({
+                message: 'Es la primera vez que inicias sesión por lo cúal aún no hay ningún registro'
+            });
+        } else {
+            if (user.deviceInformation == null || user.auxLastConnection == null) {
+                return res.status(400).json({
+                    message: 'Sin datos de sesión'
+                });
+            } else {
+                return res.status(200).json({
+                    message: 'Última sesión iniciada el: ' + user.auxLastConnection.toISOString().substring(0, 10) + ' '
+                        + user.auxLastConnection.toString().substring(16, 70) + ' desde ' + user.deviceInformation
+                });
+            }
+        }
+    }
+}
+
+export const savingSessionData = async (req: Request, res: Response) => {
+    let id = req.userId;
+    let body = req.body;
+    try {
+        const user: IUser = await User.findById(id);
+        if (!user) {
+            return res.status(400).json({
+                message: 'El usuario no existe',
+                userId: id
+            });
+        } else {
+            if (body.deviceInformation.length > 0) {
+                let userModify = await User.findByIdAndUpdate(id, { $set: { deviceInformation: body.deviceInformation } }, { new: true });
+                return res.status(200).json({
+                    message: 'Datos de sesión aguardados con éxito'
+                });
+            } else {
+                return res.status(500).json({
+                    message: 'Esta vacia la contraseña, revise de nuevo'
+                });
+            }
+        }
+    } catch (err) {
+        return res.status(500).json({
+            message: 'Ha ocurrido un error'
+        });
+    }
 }
 
 export const updatePassword = async (req: Request, res: Response) => {
