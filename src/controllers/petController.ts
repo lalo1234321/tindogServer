@@ -12,6 +12,7 @@ import { IPet } from '../interfaces/IPet';
 import Message from '../mongoose-models/messageModel';
 let fileOps = new MulterFileOps();
 import * as fs from 'fs';
+const jwt = require('jsonwebtoken');
 //changes for commit 
 export const registerPet = async (req: Request, res: Response) => {
     let body = req.body;
