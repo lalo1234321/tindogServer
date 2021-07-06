@@ -135,8 +135,8 @@ export const savingSessionData = async (req: Request, res: Response) => {
                     message: 'Datos de sesión aguardados con éxito'
                 });
             } else {
-                return res.status(500).json({
-                    message: 'Esta vacia la contraseña, revise de nuevo'
+                return res.status(404).json({
+                    message: 'Esta vacia la información del dispositivo, revise de nuevo'
                 });
             }
         }
