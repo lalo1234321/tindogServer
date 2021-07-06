@@ -101,7 +101,7 @@ export const deleteSales = async (req: Request, res: Response) => {
         const saleResult = await Sales.findById({ _id: saleId });
         if (!saleResult) {
             return res.status(400).json({
-                message: 'La venta no existe',
+                message: "La venta no existe",
                 saleId: saleId
             });
         } else {
@@ -112,7 +112,7 @@ export const deleteSales = async (req: Request, res: Response) => {
         }
     } catch (err) {
         return res.status(500).json({
-            message: 'Ha ocurrido un error'
+            message: "Ha ocurrido un error"
         });
     }
 }
@@ -124,7 +124,7 @@ export const makePurchase = async (req: Request, res: Response) => {
         const saleResult = await Sales.findById({ _id: saleId });
         if (!saleResult) {
             return res.status(400).json({
-                message: 'La venta no existe',
+                message: "La venta no existe",
                 saleId: saleId
             });
         } else {
@@ -140,13 +140,13 @@ export const makePurchase = async (req: Request, res: Response) => {
                 });
             } else {
                 return res.status(404).json({
-                    message: 'Esta vacío el idBuyer de la compra, revise de nuevo'
+                    message: "Esta vacío el idBuyer de la compra, revise de nuevo"
                 });
             }
         }
     } catch (err) {
         return res.status(500).json({
-            message: 'Ha ocurrido un error'
+            message: "Ha ocurrido un error"
         });
     }
 }

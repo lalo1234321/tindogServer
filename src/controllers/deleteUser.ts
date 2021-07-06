@@ -21,7 +21,7 @@ const deleteUser = async(req: Request, res: Response) => {
         });
     }catch(err){
         return res.status(500).json({
-            message: 'Ha ocurrido un error validando el token',
+            message: "Ha ocurrido un error validando el token",
             token: token
         });
     }

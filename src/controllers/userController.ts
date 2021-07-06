@@ -41,21 +41,21 @@ export const registerUser = async (req: Request, res: Response) => {
                         }
                     );
                     res.status(200).json({
-                        message: 'Usuario guardado correctamente'
+                        message: "Usuario guardado correctamente"
                     });
                 } else {
                     return res.status(400).json({
-                        message: 'Edad menor a 18'
+                        message: "Edad menor a 18"
                     });
                 }
             } else {
                 return res.status(404).json({
-                    message: 'Email de usuario existente'
+                    message: "Email de usuario existente"
                 });
             }
         } else {
             return res.status(404).json({
-                message: 'Nombre de usuario existente'
+                message: "Nombre de usuario existente"
             });
         }
     } catch (err) {
@@ -95,23 +95,23 @@ export const getInformationConnection = async (req: Request, res: Response) => {
     const user: IUser = await User.findById(id);
     if (!user) {
         return res.status(400).json({
-            message: 'El usuario no existe',
+            message: "El usuario no existe",
             userId: id
         });
     } else {
         if (user.auxLastConnection == null && user.auxLastConnection == null) {
             return res.status(400).json({
-                message: 'Es la primera vez que inicias sesión por lo cúal aún no hay ningún registro'
+                message: "Es la primera vez que inicias sesión por lo cúal aún no hay ningún registro"
             });
         } else {
             if (user.deviceInformation == null || user.auxLastConnection == null) {
                 return res.status(400).json({
-                    message: 'Sin datos de sesión'
+                    message: "Sin datos de sesión"
                 });
             } else {
                 return res.status(200).json({
-                    message: 'Última sesión iniciada el: ' + user.auxLastConnection.toISOString().substring(0, 10) + ' '
-                        + user.auxLastConnection.toString().substring(16, 70) + ' desde ' + user.deviceInformation
+                    message: "Última sesión iniciada el: " + user.auxLastConnection.toISOString().substring(0, 10) + " "
+                        + user.auxLastConnection.toString().substring(16, 70) + " desde " + user.deviceInformation
                 });
             }
         }
@@ -125,24 +125,24 @@ export const savingSessionData = async (req: Request, res: Response) => {
         const user: IUser = await User.findById(id);
         if (!user) {
             return res.status(400).json({
-                message: 'El usuario no existe',
+                message: "El usuario no existe",
                 userId: id
             });
         } else {
             if (body.deviceInformation.length > 0) {
                 let userModify = await User.findByIdAndUpdate(id, { $set: { deviceInformation: body.deviceInformation } }, { new: true });
                 return res.status(200).json({
-                    message: 'Datos de sesión aguardados con éxito'
+                    message: "Datos de sesión aguardados con éxito"
                 });
             } else {
                 return res.status(404).json({
-                    message: 'Esta vacia la información del dispositivo, revise de nuevo'
+                    message: "Esta vacia la información del dispositivo, revise de nuevo"
                 });
             }
         }
     } catch (err) {
         return res.status(500).json({
-            message: 'Ha ocurrido un error'
+            message: "Ha ocurrido un error"
         });
     }
 }
@@ -157,16 +157,16 @@ export const updatePassword = async (req: Request, res: Response) => {
         if (body.password.length > 0) {
             let userModify = await User.findByIdAndUpdate(id, { $set: { password: body.password } }, { new: true });
             return res.status(200).json({
-                message: 'Contraseña modifcada con éxito'
+                message: "Contraseña modifcada con éxito"
             });
         } else {
             return res.status(500).json({
-                message: 'Esta vacia la contraseña, revise de nuevo'
+                message: "Esta vacia la contraseña, revise de nuevo"
             });
         }
     } catch (err) {
         return res.status(500).json({
-            message: 'Ha ocurrido un error'
+            message: "Ha ocurrido un error"
         });
     }
 }
@@ -178,16 +178,16 @@ export const updateState = async (req: Request, res: Response) => {
         if (body.state.length > 0) {
             let userModify = await User.findByIdAndUpdate(id, { $set: { state: body.state } }, { new: true });
             return res.status(200).json({
-                message: 'Estado de residencia modifcado con éxito'
+                message: "Estado de residencia modifcado con éxito"
             });
         } else {
             return res.status(500).json({
-                message: 'Esta vacío el estado de residencia, revise de nuevo'
+                message: "Esta vacío el estado de residencia, revise de nuevo"
             });
         }
     } catch (err) {
         return res.status(500).json({
-            message: 'Ha ocurrido un error'
+            message: "Ha ocurrido un error"
         });
     }
 }
@@ -199,16 +199,16 @@ export const updateTown = async (req: Request, res: Response) => {
         if (body.town.length > 0) {
             let userModify = await User.findByIdAndUpdate(id, { $set: { town: body.town } }, { new: true });
             return res.status(200).json({
-                message: 'Municipio modifcado con éxito'
+                message: "Municipio modifcado con éxito"
             });
         } else {
             return res.status(500).json({
-                message: 'Esta vacío el municipio, revise de nuevo'
+                message: "Esta vacío el municipio, revise de nuevo"
             });
         }
     } catch (err) {
         return res.status(500).json({
-            message: 'Ha ocurrido un error'
+            message: "Ha ocurrido un error"
         });
     }
 }
