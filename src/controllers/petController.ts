@@ -446,3 +446,28 @@ export const deletePet = async (req: Request, res: Response) => {
         });
     }
 }
+
+export const petValoration = (req:Request, res:Response) => {
+    let petUsername = req.body.username;
+    let stars = req.body.stars;
+    if (stars >= 1 && stars <= 5) {
+        Pet.findOne({username: petUsername}, (err, pet) => {
+            if (err) {
+                return res.status(400).json({
+                    message: "Error encontrando mascota"
+                });
+            }
+            pet.stars = pet.stars + stars;
+            pet.meetingsNumber++;
+            pet.save();
+            return res.status(200).json({
+                message: "Guardado correctamente",
+                stars: (pet.stars/pet.meetingsNumber)
+            })
+        });
+    }else {
+        return res.status(400).json({
+            message: "Valor no esperado"
+        });
+    }
+}

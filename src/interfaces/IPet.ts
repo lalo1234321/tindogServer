@@ -14,4 +14,6 @@ export interface IPet extends Document<any, {}> {
     medicalCertificateImageURI: String;
     isDeleted: Boolean;
     owner: Types.ObjectId;
+    stars: Number;
+    meetingsNumber: Number;
 }
