@@ -67,27 +67,27 @@ export const getAllSales = (req: Request, res: Response) => {
             return res.status(404).json({
                 message: err
             });
-        } else {
-            User.populate(salesDoc, { path: "idSeller" }, function (err, salesDoc) {
+        }
+        User.populate(salesDoc, { path: "idSeller" }, function (err, salesDoc) {
+            if (err) {
+                return res.status(404).json({
+                    message: err
+                });
+            }
+            Pet.populate(salesDoc, { path: "pet" }, function (err, salesDoc) {
                 if (err) {
                     return res.status(404).json({
                         message: err
                     });
-                } else {
-                    Pet.populate(salesDoc, { path: "pet" }, function (err, salesDoc) {
-                        if (err) {
-                            return res.status(404).json({
-                                message: err
-                            });
-                        } else {
-                            res.json(
-                                salesDoc
-                            );
-                        }
-                    });
                 }
+                res.status(200).json({
+                    sales: salesDoc
+                }
+                );
+
             });
-        }
+        });
+
     });
 }
 
