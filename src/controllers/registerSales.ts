@@ -45,7 +45,7 @@ export const registerSales = async (req: Request, res: Response) => {
             Sales.create(sale);
             return res.status(200).json({
                 sale: sale,
-                message: "Todo correcto"
+                message: "Venta publicada exitosamente"
             });
         } else {
             return res.status(404).json({
