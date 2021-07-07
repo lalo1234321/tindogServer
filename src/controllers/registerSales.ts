@@ -17,44 +17,40 @@ export const registerSales = async (req: Request, res: Response) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_KEY);
         const user: IUser = await User.findById((<any>decoded).uid);
-        for (let index = 0; index < user.ownedPets.length; index++) {
-            user.ownedPets[index] = await Pet.findById(user.ownedPets[index]);
-        }
-        let flag = false;
-        let aux: IPet;
-        for (let index = 0; index < user.ownedPets.length; index++) {
-            aux = user.ownedPets[index];
-            console.log(aux.username);
-            console.log(req.body.username);
-            if (req.body.username === aux.username.valueOf()) {
-                flag = true;
-                break;
-            }
-        }
-        if (flag == false) {
+        //console.log(user);
+        let aux:IPet = await Pet.findOne({ username: req.body.username });
+        if (!aux) {
             return res.status(400).json({
                 message: "Mascota no encontrada"
             });
-        } else {
-            const userNameResult = await Sales.find({ pet: aux._id });
-            if (userNameResult.length == 0) {
-                let sale = {
-                    pet: aux._id,
-                    price: req.body.price,
-                    location: req.body.location,
-                    idSeller: user._id,
-                    date: new Date()
-                }
-                Sales.create(sale);
-                return res.status(200).json({
-                    sale: sale,
-                    message: "Todo correcto"
-                });
-            } else {
-                return res.status(404).json({
-                    message: "La mascota ya esta en venta"
-                });
+        }
+        let userId = "";
+        let ownerId = "";
+        userId = userId + user._id;
+        ownerId = ownerId + aux.owner;
+        if (userId !== ownerId) {
+            return res.status(400).json({
+                message: "Peticion no válida"
+            });
+        }
+        const userNameResult = await Sales.find({ pet: aux._id });
+        if (userNameResult.length == 0) {
+            let sale = {
+                pet: aux._id,
+                price: req.body.price,
+                location: req.body.location,
+                idSeller: user._id,
+                date: new Date()
             }
+            Sales.create(sale);
+            return res.status(200).json({
+                sale: sale,
+                message: "Todo correcto"
+            });
+        } else {
+            return res.status(404).json({
+                message: "La mascota ya esta en venta"
+            });
         }
     } catch (er) {
         return res.status(400).json({
