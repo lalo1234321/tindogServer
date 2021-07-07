@@ -38,7 +38,7 @@ export const registerSales = async (req: Request, res: Response) => {
             let sale = {
                 pet: aux._id,
                 price: req.body.price,
-                location: req.body.location,
+                location: user.town,
                 idSeller: user._id,
                 date: new Date()
             }
