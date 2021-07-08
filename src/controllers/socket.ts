@@ -11,12 +11,10 @@ const userOnline = async (uid = '') => {
     return user;
 }
 
-
-
 const userOffline = async (uid = '') => {
     const user: IUser = await User.findById(uid);
     user.isOnline = false;
-    user.auxLastConnection = new Date();
+    //user.auxLastConnection = new Date();
     await user.save();
     return user;
 }

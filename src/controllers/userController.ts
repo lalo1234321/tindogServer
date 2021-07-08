@@ -65,7 +65,7 @@ export const registerUser = async (req: Request, res: Response) => {
     }
 }
 
-export const getAllPetsOwnedByUser = async(req: Request, res: Response) => {
+export const getAllPetsOwnedByUser = async (req: Request, res: Response) => {
     // let query = User.find({ _id: req.userId }).populate('ownedPets')
     // query.select('ownedPets').exec((err, userDoc) => {
     //     if (err)
@@ -130,7 +130,7 @@ export const savingSessionData = async (req: Request, res: Response) => {
             });
         } else {
             if (body.deviceInformation.length > 0) {
-                let userModify = await User.findByIdAndUpdate(id, { $set: { deviceInformation: body.deviceInformation } }, { new: true });
+                let userModify = await User.findByIdAndUpdate(id, { $set: { deviceInformation: body.deviceInformation, auxLastConnection: new Date() } }, { new: true });
                 return res.status(200).json({
                     message: "Datos de sesión aguardados con éxito"
                 });
