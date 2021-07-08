@@ -28,7 +28,11 @@ export const putTopic = (req:Request, res:Response) => {
                     });
                 }
                 const vendedor = req.body.idVendedor;
-                console.log(vendedor);
+                if (!vendedor) {
+                    return res.status(400).json({
+                        message: "Vendedor necesario"
+                    });
+                }
                 let chatTopic = {
                     idComprador: decoded.uid,
                     idVendedor: vendedor,
@@ -56,7 +60,7 @@ export const getAllTopics = (req:Request, res:Response) => {
                 message: "Error validando el token"
             });
         }
-        chatTopicmodel.findOne({$or: [{idComprador: decoded.uid}, {idVendedor: decoded.uid}]},
+        chatTopicmodel.find({$or: [{idComprador: decoded.uid}, {idVendedor: decoded.uid}]},
             (err, chat) => {
                 if (err) {
                     return res.status(400).json({
