@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import chatTopicmodel from '../mongoose-models/chatTopicModel';
+import User from '../mongoose-models/userModel';
 const jwt = require('jsonwebtoken');
 
 export const putTopic = (req:Request, res:Response) => {
@@ -70,6 +71,6 @@ export const getAllTopics = (req:Request, res:Response) => {
                 res.status(200).json({
                     chats: chat
                 });
-            });
+            }).populate('idComprador').populate('idVendedor');
     });
 }
