@@ -110,8 +110,8 @@ export const getInformationConnection = async (req: Request, res: Response) => {
                 });
             } else {
                 return res.status(200).json({
-                    message: "Última sesión iniciada el: " + user.auxLastConnection.toISOString().substring(0, 10) + " "
-                        + user.auxLastConnection.toString().substring(16, 70) + " desde " + user.deviceInformation
+                    message: "Última sesión iniciada el: " + user.auxLastConnection.toISOString().substring(0, 10) + " a las "
+                        + user.auxLastConnection.toString().substring(16, 33) + " desde " + user.deviceInformation
                 });
             }
         }
