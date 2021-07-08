@@ -14,6 +14,7 @@ export interface IUser extends Document {
     premium: boolean;
     datePlan: Date[];
     isOnline: boolean;
+    town: String;
 }
 
 export default IUser;

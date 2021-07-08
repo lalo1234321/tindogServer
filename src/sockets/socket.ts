@@ -13,6 +13,7 @@ io.on('connection', client => {
     socketController.userOnline(uid);
     console.log(petUserName);
     client.join( petUserName );
+    // client.join( uid );
     client.on('notify', async(payload) => {
         console.log(payload);
         await socketController.registerNotification(payload.from, payload.to);

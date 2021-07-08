@@ -63,8 +63,14 @@ const validateUserBodyFields = [
     ageValidator
 ]
 
+const validatePrice = [
+    check('price', 'Debe de ser un valor numerico').isNumeric(),
+    displayErrors
+]
+
 export {
     validateCredentials,
     validatePetBodyFields,
-    validateUserBodyFields
+    validateUserBodyFields,
+    validatePrice
 }
