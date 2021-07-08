@@ -1,8 +1,10 @@
 import { Router, Request, Response } from 'express';
-import { acceptPetChat, createAcceptedModel, deletePetNotification, registerPet, 
-    retrieveChats, retrieveMessages, retrievePetImage, retrievePetNotifications, 
+import {
+    acceptPetChat, createAcceptedModel, deletePetNotification, registerPet,
+    retrieveChats, retrieveMessages, retrievePetImage, retrievePetNotifications,
     updateAge, updateName, deletePet, updateProfileImage, updateMedicalCertificate,
-    petValoration } from "../controllers/petController";
+    petValoration, getAllSpeciesPet, getAllBreedsBySpeciePet
+} from "../controllers/petController";
 import { validatePetBodyFields } from "../middleware/validateBodyFields";
 import { validatePetFormData, validateUploadedFiles } from "../middleware/validateMediaFields";
 import { validateJWT } from "../middleware/validateJWT";
@@ -41,5 +43,7 @@ router.put('/deletePet/:petId', [validateJWT], deletePet);
 router.put('/pet/update/profilePicture/:petId', validateJWT, upload.single('profilePic'), updateProfileImage);
 router.put('/pet/update/medicalCertificate/:petId', validateJWT, upload.single('certificate'), updateMedicalCertificate)
 router.post('/pet/valoration', validateJWT, petValoration);
+router.get('/getAllSpeciesPet', validateJWT, getAllSpeciesPet);
+router.get('/getAllBreedsBySpeciePet', validateJWT, getAllBreedsBySpeciePet);
 
 export default router;

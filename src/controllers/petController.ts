@@ -508,3 +508,30 @@ export const petValoration = (req: Request, res: Response) => {
         });
     }
 };
+
+export const getAllSpeciesPet = async (req: Request, res: Response) => {
+    Pet.distinct("specie", (err, petDoc) => {
+        if (err)
+            return res.status(404).json({
+                message: err
+            })
+        res.json(
+            petDoc
+        )
+    });
+}
+
+export const getAllBreedsBySpeciePet = async (req: Request, res: Response) => {
+    let specie = req.body.specie;
+    let query = Pet.find({ specie: specie });
+
+    query.distinct("breed", (err, petDoc) => {
+        if (err)
+            return res.status(404).json({
+                message: err
+            })
+        res.json(
+            petDoc
+        )
+    });
+}
