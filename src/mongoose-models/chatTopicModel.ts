@@ -8,9 +8,6 @@ let chatTopic = new Schema({
     idVendedor: {
         type: Schema.Types.ObjectId
     },
-    usernameMascota: {
-        type: String
-    },
     topic: {
         type: String
     }

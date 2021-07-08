@@ -15,6 +15,7 @@ import login from './routes/auth';
 import deleteUser from './routes/DeleteUser';
 import sales from './routes/salesRoutes';
 import terms from './routes/termsRoutes';
+import topicChat from './routes/chatTopicRoutes';
 
 app.use(morgan('dev'));
 app.use(cors());
@@ -22,6 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(userRoutes); 
 app.use(petRoutes);
+app.use(topicChat);
 app.use(login);
 app.use(express.static('public'));
 app.use(sales);
