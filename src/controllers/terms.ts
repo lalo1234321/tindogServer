@@ -20,26 +20,26 @@ export const registerTerms = async (req: Request, res: Response) => {
                         }
                         Terms.create(term);
                         res.status(200).json({
-                            message: 'Término guardado correctamente'
+                            message: "Término guardado correctamente"
                         });
                     } else {
                         return res.status(404).json({
-                            message: 'Versión de término junto con este plan existente'
+                            message: "Versión de término junto con este plan existente"
                         });
                     }
                 } else {
                     return res.status(404).json({
-                        message: 'Esta vacío el id del plan, revise de nuevo'
+                        message: "Esta vacío el id del plan, revise de nuevo"
                     });
                 }
             } else {
                 return res.status(404).json({
-                    message: 'Esta vacía la descripción del término, revise de nuevo'
+                    message: "Esta vacía la descripción del término, revise de nuevo"
                 });
             }
         } else {
             return res.status(404).json({
-                message: 'Esta vacía la versión, revise de nuevo'
+                message: "Esta vacía la versión, revise de nuevo"
             });
         }
     } catch (err) {
