@@ -27,9 +27,11 @@ export const putTopic = (req:Request, res:Response) => {
                         message: "Chat ya existente. Revisar su bandeja"
                     });
                 }
+                const vendedor = req.body.idVendedor;
+                console.log(vendedor);
                 let chatTopic = {
                     idComprador: decoded.uid,
-                    idVendedor: req.body.idVendedor,
+                    idVendedor: vendedor,
                     topic: "Ventas"
                 }
                 await chatTopicmodel.create(chatTopic);
