@@ -61,7 +61,6 @@ export const registerSales = async (req: Request, res: Response) => {
 }
 
 export const getAllSales = (req: Request, res: Response) => {
-    //Sales.find({ status: "Disponible" }, (err, salesDoc) => {
     Sales.find({ idSeller: { $ne: req.userId }, status: "Disponible" }, (err, salesDoc) => {
         if (err) {
             return res.status(404).json({
@@ -82,12 +81,43 @@ export const getAllSales = (req: Request, res: Response) => {
                 }
                 res.status(200).json({
                     sales: salesDoc
-                }
-                );
-
+                });
             });
         });
 
+    });
+}
+
+export const getAllSalesByBreedsAndSpeciePet = async (req: Request, res: Response) => {
+    let specie = req.body.specie;
+    let breed = req.body.breed;
+    let query = Sales.find({ idSeller: { $ne: req.userId }, status: "Disponible" }).populate({ path: "pet", model: Pet, match: { specie: specie, breed: breed } }).populate('idSeller');
+    query.exec((err, salesDoc) => {
+        if (err) {
+            return res.status(404).json({
+                message: err
+            });
+        } else {
+            let i = 0;
+            let j = 0;
+            var nsalesDoc = [];
+            while (i < salesDoc.length) {
+                if (salesDoc[i].pet != null) {
+                    nsalesDoc.push(salesDoc[i]);
+                    j++;
+                }
+                i++;
+            }
+            if (nsalesDoc.length==0) {
+                return res.status(400).json({
+                    message: "Aún no hay ventas con esos filtros"
+                });
+            } else {
+                res.status(200).json({
+                    sales: nsalesDoc
+                });
+            }
+        }
     });
 }
 
