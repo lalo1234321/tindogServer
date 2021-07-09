@@ -1,14 +1,8 @@
-<<<<<<< HEAD
-import { Router } from 'express'; import {
-    registerUser, getAllPetsOwnedByUser, updatePassword,
-    updateState, updateTown, getInformationConnection, savingSessionData,
-    degrade
-} from "../controllers/userController";
-=======
-import { Router } from 'express'; import { registerUser, getAllPetsOwnedByUser, 
+import { Router } from 'express';
+import { registerUser, getAllPetsOwnedByUser, 
     updatePassword, updateState, updateTown, getInformationConnection, 
-    savingSessionData, getID } from "../controllers/userController";
->>>>>>> main
+    savingSessionData, getID, degrade } from "../controllers/userController";
+
 import { confirmation } from '../controllers/confirmation';
 import { validateJWT } from '../middleware/validateJWT';
 import { upgrade1 } from '../controllers/upgrade';
@@ -25,10 +19,7 @@ router.put('/updateTown', [validateJWT], updateTown);
 router.post('/savingSessionData', [validateJWT], savingSessionData);
 router.get('/confirmation/:token', confirmation);
 router.put('/upgrade', upgrade1);
-<<<<<<< HEAD
 router.put('/degrade',[validateJWT],degrade);
-
-=======
 router.get('/user/getId', getID);
->>>>>>> main
+
 export default router;
