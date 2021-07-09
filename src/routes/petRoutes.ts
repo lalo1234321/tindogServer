@@ -44,6 +44,6 @@ router.put('/pet/update/profilePicture/:petId', validateJWT, upload.single('prof
 router.put('/pet/update/medicalCertificate/:petId', validateJWT, upload.single('certificate'), updateMedicalCertificate)
 router.post('/pet/valoration', validateJWT, petValoration);
 router.get('/getAllSpeciesPet', validateJWT, getAllSpeciesPet);
-router.get('/getAllBreedsBySpeciePet', validateJWT, getAllBreedsBySpeciePet);
+router.post('/getAllBreedsBySpeciePet', validateJWT, getAllBreedsBySpeciePet);
 
 export default router;

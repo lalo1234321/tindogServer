@@ -527,19 +527,20 @@ export const getAllSpeciesPet = async (req: Request, res: Response) => {
 export const getAllBreedsBySpeciePet = async (req: Request, res: Response) => {
     let specie = req.body.specie;
     if (specie.lengh == 0) {
-        let query = Pet.find({ specie: specie });
-        query.distinct("breed", (err, petDoc) => {
-            if (err)
-                return res.status(404).json({
-                    message: err
-                })
-            res.json(
-                petDoc
-            )
-        });
-    } else {
         return res.status(404).json({
             message: "Esta vacia la especie de la mascota, revise de nuevo"
         });
     }
+    let query = Pet.find({ specie: specie });
+    query.distinct("breed", (err, petDoc) => {
+        if (err)
+            return res.status(404).json({
+                message: err
+            })
+        res.json(
+            petDoc
+        )
+    });
+
+
 }
