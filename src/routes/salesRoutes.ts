@@ -13,7 +13,7 @@ router.get('/sales/confirmation');
 router.get('/getAllSales', [validateJWT], getAllSales);
 router.get('/getAllSalesByUser', [validateJWT], getAllSalesByUser);
 router.get('/getAllSalesByBreedsAndSpeciePet', [validateJWT], getAllSalesByBreedsAndSpeciePet);
-router.put('/deleteSales/:saleId', [validateJWT], deleteSales);
+router.put('/deleteSales', [validateJWT], deleteSales);
 router.put('/makePurchase/:saleId', [validateJWT], makePurchase);
 
 export default router;

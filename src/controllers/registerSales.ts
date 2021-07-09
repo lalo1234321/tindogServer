@@ -4,6 +4,8 @@ import Sales from '../mongoose-models/SalesModel';
 import User from '../mongoose-models/userModel';
 import Pet from '../mongoose-models/petModel';
 import { IPet } from '../interfaces/IPet';
+import salesModel from '../mongoose-models/SalesModel';
+import { ISales } from '../interfaces/ISales';
 
 const jwt = require('jsonwebtoken');
 
@@ -150,21 +152,24 @@ export const getAllSalesByBreedsAndSpeciePet = async (req: Request, res: Respons
 }
 
 export const deleteSales = async (req: Request, res: Response) => {
-    const saleId = req.params.saleId;
-    console.log(saleId);
+    let petUsername = req.body.username;
     try {
-        const saleResult = await Sales.findById({ _id: saleId });
-        if (!saleResult) {
+        let pet:IPet = await Pet.findOne({username: petUsername});
+        if (!pet) {
             return res.status(400).json({
-                message: "La venta no existe",
-                saleId: saleId
-            });
-        } else {
-            let userModify = await Sales.findByIdAndDelete(saleId);
-            return res.status(200).json({
-                message: "Venta eliminada con éxito"
+                message: "Mascota no encontrada"
             });
         }
+        let sale:ISales = await salesModel.findOne({pet: pet._id});
+        if (!sale) {
+            return res.status(400).json({
+                message: "Esta mascota no está en venta"
+            });
+        }
+        await sale.delete();
+        res.status(200).json({
+            message: "Eliminado correctamente"
+        });
     } catch (err) {
         return res.status(500).json({
             message: "Ha ocurrido un error"
