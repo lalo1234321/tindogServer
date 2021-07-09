@@ -3,13 +3,14 @@ import { IChatTopic } from '../interfaces/IChatTopic'
 
 let chatTopic = new Schema({
     idComprador: {
-        type: Schema.Types.ObjectId
+        type: Schema.Types.ObjectId,
+        ref: 'users',
+        required: true
     },
     idVendedor: {
-        type: Schema.Types.ObjectId
-    },
-    usernameMascota: {
-        type: String
+        type: Schema.Types.ObjectId,
+        ref: 'users',
+        required: true
     },
     topic: {
         type: String
