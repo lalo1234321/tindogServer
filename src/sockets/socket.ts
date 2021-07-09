@@ -12,7 +12,7 @@ io.on('connection', client => {
     console.log('Cliente autenticado');
     socketController.userOnline(uid);
     console.log(petUserName);
-    client.join( petUserName );
+    client.join( [petUserName, uid] );
     // client.join( uid );
     client.on('notify', async(payload) => {
         console.log(payload);
@@ -23,6 +23,16 @@ io.on('connection', client => {
         console.log(payload);
         await socketController.registerMessage( payload.from, payload.to, payload.msg );
         io.to(payload.to).emit('personal-message',payload);
+    });
+    // {
+    //     to:idUser,
+    //     from: idUser,
+    //     msg:algo
+    // }
+    client.on('chat-message', async(payload) => {
+        console.log(payload);
+        await socketController.registerMessage( payload.from, payload.to, payload.msg );
+        io.to(payload.to).emit('chat-message', payload);
     });
     client.on('disconnect', () => {
         console.log('Cliente descontectado');

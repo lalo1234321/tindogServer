@@ -212,3 +212,16 @@ export const updateTown = async (req: Request, res: Response) => {
         });
     }
 }
+
+export const getID = (req:Request, res:Response) => {
+    const token = req.headers.token;
+    if (!token) {
+        return res.status(400).json({
+            message: "Token no introducido"
+        });
+    }
+    const decoded = jwt.verify( token, process.env.JWT_KEY );
+    return res.status(200).json({
+        id: decoded.uid
+    });
+}
