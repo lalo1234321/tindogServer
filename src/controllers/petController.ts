@@ -12,7 +12,10 @@ import { IPet } from '../interfaces/IPet';
 import Message from '../mongoose-models/messageModel';
 let fileOps = new MulterFileOps();
 import * as fs from 'fs';
+import Sales from '../mongoose-models/SalesModel';
+
 const jwt = require('jsonwebtoken');
+
 //changes for commit 
 export const registerPet = async (req: Request, res: Response) => {
     let body = req.body;
@@ -137,12 +140,12 @@ export const updateProfileImage = async (req: Request, res: Response) => {
     }
 };
 
-export const updateMedicalCertificate = async (req:Request, res:Response) => {
+export const updateMedicalCertificate = async (req: Request, res: Response) => {
     let petId = req.params.petId;
     let file: IFile;
     try {
         file = req.file;
-        
+
         let pet = await Pet.findById(petId);
         if (!pet) {
             return res.status(400).json({
@@ -471,32 +474,32 @@ export const petValoration = (req: Request, res: Response) => {
         let petUsername = req.body.username;
         let stars = req.body.stars;
         if (stars >= 1 && stars <= 5) {
-            Pet.findOne({ username: petUsername, previousMeetings: {$ne: petId}}, 
+            Pet.findOne({ username: petUsername, previousMeetings: { $ne: petId } },
                 (err, pet) => {
-                if (err) {
-                    return res.status(400).json({
-                        message: "Error encontrando mascota",
+                    if (err) {
+                        return res.status(400).json({
+                            message: "Error encontrando mascota",
+                        });
+                    }
+                    if (!pet) {
+                        return res.status(400).json({
+                            message: "Valoracion ya realizada"
+                        });
+                    }
+                    if (userId != pet.owner) {
+                        pet.stars = pet.stars + stars;
+                        pet.meetingsNumber++;
+                        pet.previousMeetings.push(petId);
+                        pet.save();
+                        return res.status(200).json({
+                            message: "Guardado correctamente",
+                            stars: pet.stars / pet.meetingsNumber,
+                        });
+                    }
+                    res.status(400).json({
+                        message: "Usuario invalido",
                     });
-                }
-                if (!pet) {
-                    return res.status(400).json({
-                        message: "Valoracion ya realizada"
-                    });
-                }
-                if (userId != pet.owner) {
-                    pet.stars = pet.stars + stars;
-                    pet.meetingsNumber++;
-                    pet.previousMeetings.push(petId);
-                    pet.save();
-                    return res.status(200).json({
-                        message: "Guardado correctamente",
-                        stars: pet.stars / pet.meetingsNumber,
-                    });
-                }
-                res.status(400).json({
-                    message: "Usuario invalido",
                 });
-            });
         } else {
             return res.status(400).json({
                 message: "Valor no esperado",
@@ -523,15 +526,20 @@ export const getAllSpeciesPet = async (req: Request, res: Response) => {
 
 export const getAllBreedsBySpeciePet = async (req: Request, res: Response) => {
     let specie = req.body.specie;
-    let query = Pet.find({ specie: specie });
-
-    query.distinct("breed", (err, petDoc) => {
-        if (err)
-            return res.status(404).json({
-                message: err
-            })
-        res.json(
-            petDoc
-        )
-    });
+    if (specie.lengh == 0) {
+        let query = Pet.find({ specie: specie });
+        query.distinct("breed", (err, petDoc) => {
+            if (err)
+                return res.status(404).json({
+                    message: err
+                })
+            res.json(
+                petDoc
+            )
+        });
+    } else {
+        return res.status(404).json({
+            message: "Esta vacia la especie de la mascota, revise de nuevo"
+        });
+    }
 }
