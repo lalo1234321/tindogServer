@@ -15,6 +15,8 @@ export interface IUser extends Document {
     datePlan: Date[];
     isOnline: boolean;
     town: String;
+    auxLastConnection: Date;
+    deviceInformation: String;
 }
 
 export default IUser;
