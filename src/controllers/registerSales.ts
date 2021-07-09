@@ -88,6 +88,34 @@ export const getAllSales = (req: Request, res: Response) => {
     });
 }
 
+export const getAllSalesByUser = (req: Request, res: Response) => {
+    Sales.find({ idSeller: req.userId }, (err, salesDoc) => {
+        if (err) {
+            return res.status(404).json({
+                message: err
+            });
+        }
+        User.populate(salesDoc, { path: "idSeller" }, function (err, salesDoc) {
+            if (err) {
+                return res.status(404).json({
+                    message: err
+                });
+            }
+            Pet.populate(salesDoc, { path: "pet" }, function (err, salesDoc) {
+                if (err) {
+                    return res.status(404).json({
+                        message: err
+                    });
+                }
+                res.status(200).json({
+                    sales: salesDoc
+                });
+            });
+        });
+
+    });
+}
+
 export const getAllSalesByBreedsAndSpeciePet = async (req: Request, res: Response) => {
     let specie = req.body.specie;
     let breed = req.body.breed;
@@ -108,7 +136,7 @@ export const getAllSalesByBreedsAndSpeciePet = async (req: Request, res: Respons
                 }
                 i++;
             }
-            if (nsalesDoc.length==0) {
+            if (nsalesDoc.length == 0) {
                 return res.status(400).json({
                     message: "Aún no hay ventas con esos filtros"
                 });
@@ -156,10 +184,15 @@ export const makePurchase = async (req: Request, res: Response) => {
             });
         } else {
             if (id.length > 0) {
-                let userModify = await Sales.findByIdAndUpdate(saleId, {
+                const sale = await Sales.findByIdAndUpdate(saleId, {
                     $set: {
                         idBuyer: id,
                         status: "No disponible"
+                    }
+                }, { new: true });
+                await Pet.findByIdAndUpdate(sale.pet, {
+                    $set: {
+                        isDeleted: true
                     }
                 }, { new: true });
                 return res.status(200).json({

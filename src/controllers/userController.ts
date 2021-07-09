@@ -212,3 +212,31 @@ export const updateTown = async (req: Request, res: Response) => {
         });
     }
 }
+
+export const degrade = async (req: Request, res: Response) => {
+    let id = req.userId;
+    try {
+        const user: IUser = await User.findById(id);
+        let date = new Date();
+        let dateW = new Date(date.getFullYear(), date.getMonth(), date.getDay() + 7);
+        console.log('datePlan[1] ' + user.datePlan[1].toISOString().substring(0, 10));
+        console.log('dateW ' + dateW.toISOString().substring(0, 10));
+        console.log('date ' + date.toISOString().substring(0, 10));
+        if (user.datePlan[1].toISOString().substring(0, 10) <= dateW.toISOString().substring(0, 10)) {
+            if (user.datePlan[1].toISOString().substring(0, 10) == date.toISOString().substring(0, 10)) {
+                user.premium = false;
+                return res.status(200).json({
+                    message: "Tu plan expiro, ya no eres premium"
+                });
+            } else {
+                return res.status(200).json({
+                    message: "Tu plan esta por expirar"
+                });
+            }
+        }
+    } catch (err) {
+        return res.status(500).json({
+            message: "Ha ocurrido un error"
+        });
+    }
+}
