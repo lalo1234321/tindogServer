@@ -526,7 +526,7 @@ export const getAllSpeciesPet = async (req: Request, res: Response) => {
 
 export const getAllBreedsBySpeciePet = async (req: Request, res: Response) => {
     let specie = req.body.specie;
-    if (specie.lengh == 0) {
+    if (req.body.specie.length > 0) {
         let query = Pet.find({ specie: specie });
         query.distinct("breed", (err, petDoc) => {
             if (err)
